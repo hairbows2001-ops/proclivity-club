@@ -24,6 +24,7 @@ export interface AtlasBook {
   year: number;
 }
 
+const GREEK = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ"];
 const CX = W / 2, CY = H / 2, RX = 760, RY = 470;
 
 function starPath(x: number, y: number, r: number) {
@@ -146,29 +147,63 @@ export function AtlasMap({ constellations, books }: { constellations: SkyConstel
                     <circle cx={s.x} cy={s.y} r={r1(r * 2.6)} fill="url(#atlas-halo)" opacity={on ? 1 : 0.45} style={{ transition: "opacity 0.6s" }} />
                     <path d={starPath(s.x, s.y, r)} fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${(i * 2.1) % 7}s`, ["--t" as string]: "7s", ["--o" as string]: 1 }} />
                     {on && <circle cx={s.x} cy={s.y} r={r1(r + 8)} fill="none" stroke="var(--color-gold-soft)" strokeWidth="0.8" />}
+                    <text x={r1(s.x + r + 3)} y={r1(s.y - r + 2)} fontSize="11" fontStyle="italic" fill="var(--color-faded)" opacity="0.7" fontFamily="var(--font-display)">
+                      {GREEK[c.stars.filter((t) => t.book).indexOf(s) % GREEK.length]}
+                    </text>
                   </a>
                 );
               }),
             )}
+
+            {hover && <StarLabel star={hover.star} book={books[hover.book]} touch={lastPointer.current === "touch"} />}
           </svg>
 
-          {hover && (
-            <div
-              className="pointer-events-none absolute z-10 w-max max-w-[16rem] -translate-x-1/2 -translate-y-[calc(100%+22px)] border border-[var(--rule-strong)] bg-midnight/95 px-5 py-3 text-center"
-              style={{ left: `${(hover.star.x / W) * 100}%`, top: `${(hover.star.y / H) * 100}%` }}
-              role="status"
-            >
-              <p className="display text-2xl leading-tight text-gold-soft">{books[hover.book].title}</p>
-              <p className="mt-1 text-sm text-mist italic">
-                {books[hover.book].author}, {books[hover.book].year}
-              </p>
-              {lastPointer.current === "touch" && <p className="label mt-2 text-[0.65rem] text-gold">Tap again to enter</p>}
-            </div>
-          )}
+          {/* for screen readers, the same words the label shows */}
+          <p className="sr-only" role="status">
+            {hover ? `${books[hover.book].title}, ${books[hover.book].author}, ${books[hover.book].year}` : ""}
+          </p>
         </div>
       </div>
       <p className="label mt-4 text-center text-[0.7rem] text-mist md:hidden">Drag sideways to explore the chart</p>
     </div>
+  );
+}
+
+/* ── The label that appears beside a star, set like an engraver's annotation ── */
+
+function StarLabel({ star, book, touch }: { star: SkyStar; book: AtlasBook; touch: boolean }) {
+  const left = star.x > W * 0.68;
+  const dir = left ? -1 : 1;
+  const r = 5 + star.magnitude * 2.2;
+  const x0 = star.x + dir * (r + 10);
+  const x1 = star.x + dir * (r + 46);
+  const tx = x1 + dir * 10;
+  const anchor = left ? "end" : "start";
+  const y = star.y;
+  return (
+    <motion.g
+      key={star.id}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      pointerEvents="none"
+      aria-hidden
+    >
+      <ellipse cx={tx + dir * 125} cy={y + 6} rx={210} ry={70} fill="url(#atlas-label-veil)" />
+      <line x1={x0} y1={y} x2={x1} y2={y} stroke="var(--color-gold)" strokeWidth="0.7" />
+      <path d={sparkle(x1, y, 4)} fill="var(--color-gold-soft)" />
+      <text x={tx} y={y + 2} textAnchor={anchor} fontSize="27" fontStyle="italic" fill="var(--color-gold-soft)" fontFamily="var(--font-display)">
+        {book.title}
+      </text>
+      <text x={tx} y={y + 25} textAnchor={anchor} fontSize="12.5" letterSpacing="3.5" fill="var(--color-mist)" fontFamily="var(--font-display)">
+        {book.author.toUpperCase()} · {book.year}
+      </text>
+      {touch && (
+        <text x={tx} y={y + 44} textAnchor={anchor} fontSize="12" fontStyle="italic" fill="var(--color-gold)" fontFamily="var(--font-display)">
+          tap again to enter
+        </text>
+      )}
+    </motion.g>
   );
 }
 
@@ -215,6 +250,11 @@ function ChartFurniture() {
           <stop offset="1" stopColor="#0d1430" />
         </radialGradient>
         <filter id="atlas-blur"><feGaussianBlur stdDeviation="14" /></filter>
+        <radialGradient id="atlas-label-veil">
+          <stop offset="0" stopColor="#111a38" stopOpacity="0.97" />
+          <stop offset="0.55" stopColor="#111a38" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#111a38" stopOpacity="0" />
+        </radialGradient>
       </defs>
 
       {/* the sky inside the oval */}

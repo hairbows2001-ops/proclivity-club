@@ -251,8 +251,12 @@ a {
 
 /* Engraving that inks itself in, layer by layer, when a BookWorld plate first appears.
    Every stroked path carries pathLength="1" so the dash maths is the same for all. */
+/* Strokes start fully transparent: zero-length dashes would otherwise show
+   their round caps as stray dots before the line begins to draw. */
 @keyframes ink-in {
-  to { stroke-dashoffset: 0; }
+  0% { stroke-dashoffset: 1; stroke-opacity: 0; }
+  3% { stroke-opacity: 1; }
+  100% { stroke-dashoffset: 0; stroke-opacity: 1; }
 }
 .ink-in .s,
 .ink-in .s0,
@@ -261,6 +265,7 @@ a {
 .ink-in .sf {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
+  stroke-opacity: 0;
   animation: ink-in var(--dur, 3.2s) var(--ease-ink) var(--ld, 0s) forwards;
 }
 
@@ -272,11 +277,16 @@ a {
 .draw-by-scroll .sf {
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--draw, 0));
+  stroke-opacity: clamp(0, calc(var(--draw, 0) * 40), 1);
 }
 
 /* Fills (lit windows, hidden backgrounds) arrive with their layer. */
 .draw-by-scroll :is(path, circle, rect, ellipse) {
   fill-opacity: clamp(0, calc(var(--draw, 1) * 2.5 - 0.5), 1);
+}
+
+.draw-by-scroll .reflect {
+  opacity: var(--draw, 1);
 }
 
 /* Respect people who prefer less movement: everything appears, nothing moves. */
@@ -292,6 +302,7 @@ a {
   .draw-by-scroll .s, .draw-by-scroll .s0, .draw-by-scroll .s1, .draw-by-scroll .s2, .draw-by-scroll .sf {
     stroke-dasharray: none;
     stroke-dashoffset: 0;
+    stroke-opacity: 1;
   }
   .shooting-star { display: none; }
   .window-lit { opacity: 0.7; }

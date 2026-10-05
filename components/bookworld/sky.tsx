@@ -70,10 +70,10 @@ export function SkyConstellation({ rng, x, y, w, h, label }: { rng: Rng; x: numb
 
 /* ── Moon, sun and other luminaries ────────────────────────────────────── */
 
-export function Luminary({ kind, x, y, r, uid, rng }: { kind: Sky; x: number; y: number; r: number; uid: string; rng: Rng }) {
+export function Luminary({ kind, x, y, r, uid, rng, rings: showRings = true }: { kind: Sky; x: number; y: number; r: number; uid: string; rng: Rng; rings?: boolean }) {
   if (kind === "starfield") return <MilkyWay rng={rng} />;
 
-  const rings = (
+  const rings = !showRings ? null : (
     <g>
       <Ink c="s0" d={circle(x, y, r * 1.9)} />
       <Ink c="sf" d={circle(x, y, r * 2.7)} />

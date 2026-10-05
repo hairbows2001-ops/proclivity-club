@@ -20,6 +20,9 @@ import { Aeroplane, Birds, Boat, Figure, Tree } from "./nature";
 import { CelestialMark, Luminary, SkyConstellation, Stars, sparkle } from "./sky";
 import { H, HZ, W, Water, buildScene } from "./terrain";
 import { circle, seg, smooth, type Pt } from "./geometry";
+import { SCENES } from "./scenes";
+
+const DENSITY = { sparse: 0.6, medium: 1, "medium-high": 1.3, dense: 1.6 } as const;
 
 type Variant = "plate" | "vignette" | "banner";
 
@@ -35,11 +38,11 @@ export interface BookWorldProps {
 const VIEWBOX: Record<Variant, string> = {
   plate: `0 0 ${W} ${H}`,
   banner: `0 120 ${W} ${H - 120}`,
-  vignette: "250 80 700 700",
+  vignette: "", // set per book, around its focal point
 };
 
 export function BookWorld({ book, variant = "plate", animate = false, className = "", label }: BookWorldProps) {
-  const cfg: Required<Omit<BookWorldConfig, "seed" | "landmarkSide">> & BookWorldConfig = {
+  const cfg: Required<Omit<BookWorldConfig, "seed" | "landmarkSide" | "art">> & BookWorldConfig = {
     landmark: "none",
     architecture: "none",
     sky: "crescent",
@@ -64,12 +67,23 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
   ];
   const d = (t: number) => (animate ? t : 0);
   const vignette = variant === "vignette";
+  const density = DENSITY[cfg.art?.density ?? "medium"];
+  const sceneFn = cfg.art?.scene ? SCENES[cfg.art.scene] : undefined;
+  const composed = sceneFn?.({
+    rng: createRng(seedBase + ":scene"),
+    uid,
+    vignette,
+    density,
+    label: book.themes[hash(book.slug) % book.themes.length],
+  });
+  const med = composed?.medallion ?? { cx: 600, cy: 430 };
+  const viewBox = vignette ? `${med.cx - 350} ${med.cy - 350} 700 700` : VIEWBOX[variant];
 
   const pathEdges = scene.path && has("path") ? roadEdges(scene.path) : null;
 
   return (
     <svg
-      viewBox={VIEWBOX[variant]}
+      viewBox={viewBox}
       className={`etching ${animate ? "ink-in" : ""} ${className}`}
       style={vignette ? ({ ["--hair" as string]: 1.5 }) : undefined}
       role={label ? "img" : undefined}
@@ -106,16 +120,24 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
           <feGaussianBlur stdDeviation="18" />
         </filter>
         <clipPath id={`${uid}-clip`}>
-          {vignette ? <circle cx="600" cy="430" r="330" /> : <rect x="0" y="0" width={W} height={H} />}
+          {vignette ? <circle cx={med.cx} cy={med.cy} r="330" /> : <rect x="0" y="0" width={W} height={H} />}
         </clipPath>
       </defs>
 
       <g clipPath={`url(#${uid}-clip)`}>
         <rect x="0" y="0" width={W} height={H} fill={`url(#${uid}-sky)`} />
 
+        {composed ? (
+          composed.layers.map((layer, i) => (
+            <Layer key={i} delay={d(layer.delay)}>
+              {layer.node}
+            </Layer>
+          ))
+        ) : (
+          <>
         {/* ── Sky ── */}
         <Layer delay={d(0)}>
-          <Stars rng={rng} count={vignette ? 90 : 170} x0={0} x1={W} y0={20} y1={HZ - 30} />
+          <Stars rng={rng} count={Math.round((vignette ? 90 : 170) * density)} x0={0} x1={W} y0={20} y1={HZ - 30} />
           <Luminary kind={cfg.sky} x={moon.x} y={moon.y} r={moon.r} uid={uid} rng={rng} />
           <SkyConstellation
             rng={rng}
@@ -182,13 +204,17 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
           )}
         </Layer>
 
+          </>
+        )}
+
         {/* ── Weather ── */}
         <Atmosphere kind={cfg.atmosphere} uid={uid} seed={seedBase} />
       </g>
 
-      {vignette && cfg.architecture !== "none" && <Orbit x={scene.arch.x} y={scene.arch.y - 50} />}
+      {vignette && !composed && cfg.architecture !== "none" && <Orbit x={scene.arch.x} y={scene.arch.y - 50} />}
+      {vignette && composed?.orbit && <Orbit {...composed.orbit} />}
       {variant === "plate" && <PlateFrame />}
-      {vignette && <MedallionFrame />}
+      {vignette && <MedallionFrame cx={med.cx} cy={med.cy} />}
     </svg>
   );
 }
@@ -290,17 +316,17 @@ function PlateFrame() {
   );
 }
 
-function MedallionFrame() {
+function MedallionFrame({ cx, cy }: { cx: number; cy: number }) {
   const ticks: string[] = [];
   for (let i = 0; i < 120; i++) {
     const a = (i / 120) * Math.PI * 2;
     const r0 = 334, r1_ = i % 10 === 0 ? 346 : 340;
-    ticks.push(seg(600 + Math.cos(a) * r0, 430 + Math.sin(a) * r0, 600 + Math.cos(a) * r1_, 430 + Math.sin(a) * r1_));
+    ticks.push(seg(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0, cx + Math.cos(a) * r1_, cy + Math.sin(a) * r1_));
   }
   return (
     <g aria-hidden>
-      <Ink c="s1" d={circle(600, 430, 330)} />
-      <Ink c="s0" d={circle(600, 430, 334)} />
+      <Ink c="s1" d={circle(cx, cy, 330)} />
+      <Ink c="s0" d={circle(cx, cy, 334)} />
       <Ink c="s0" d={ticks.join("")} />
     </g>
   );

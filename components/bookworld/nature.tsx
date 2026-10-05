@@ -5,34 +5,47 @@ import type { Trees } from "@/lib/types";
 import { Ink } from "./Ink";
 import { circle, line, poly, seg, smooth, type Pt } from "./geometry";
 
-/* ── Foliage: a scalloped cluster, the engraver's shorthand for leaves ─── */
-
+/* ── Foliage ───────────────────────────────────────────────────────────
+ * An engraver's crown: a broken, irregular leafy edge, then parallel
+ * hatching gathered on the side away from the light, and a few flicks of
+ * leaf along the lit edge. No cloud outlines.
+ */
 export function scallopCrown(cx: number, cy: number, r: number, rng: Rng, s = 1): ReactNode {
-  const n = Math.max(7, Math.round((Math.PI * 2 * r) / (8 * s)));
+  const n = Math.max(10, Math.round((Math.PI * 2 * r) / (5.5 * s)));
+  const squash = 0.86;
   const pts: Pt[] = Array.from({ length: n }, (_, i) => {
     const a = (i / n) * Math.PI * 2;
-    const rr = r * rng.range(0.9, 1.06);
-    return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * 0.86];
+    const rr = r * rng.range(0.84, 1.08);
+    return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * squash];
   });
   let d = `M${r1(pts[0][0])} ${r1(pts[0][1])}`;
   for (let i = 1; i <= n; i++) {
     const [px, py] = pts[i % n];
     const [qx, qy] = pts[i - 1];
-    const br = (Math.hypot(px - qx, py - qy) / 2) * 1.15;
+    const br = (Math.hypot(px - qx, py - qy) / 2) * rng.range(1.02, 1.4);
     d += `A${r1(br)} ${r1(br)} 0 0 1 ${r1(px)} ${r1(py)}`;
   }
-  // shading strokes gathered on the side away from the light
-  const texture = Array.from({ length: Math.max(4, Math.round(r / (3.2 * s))) }, (_, k) => {
-    const a = rng.range(-0.15, 1.9);
-    const dd = rng.range(0.55, 0.9) * r;
-    const tx = cx + Math.cos(a) * dd, ty = cy + Math.sin(a) * dd * 0.82;
-    const len = rng.range(0.18, 0.32) * r;
-    return <Ink key={k} c="s0" d={seg(tx, ty, tx - len * 0.8, ty - len * 0.45)} />;
+  // hatching on the shadowed (lower right) side, clipped to the crown by geometry
+  const ux = 0.8, uy = -0.6, nx = 0.6, ny = 0.8;
+  const R = r * 0.84;
+  const hatch: ReactNode[] = [];
+  for (let t = R * 0.05; t < R * 0.92; t += 2.6 * s) {
+    const half = Math.sqrt(Math.max(0, R * R - t * t));
+    const mx = cx + nx * t, my = cy + ny * t * squash;
+    const a0 = half * rng.range(0.35, 0.95), a1 = half * rng.range(0.55, 1);
+    hatch.push(<Ink key={"h" + t} c="s0" d={seg(mx - ux * a0, my - uy * a0 * squash, mx + ux * a1, my + uy * a1 * squash)} />);
+  }
+  // leaf flicks on the lit edge
+  const flicks = Array.from({ length: Math.round(r / (5 * s)) }, (_, k) => {
+    const a = rng.range(Math.PI * 1.05, Math.PI * 1.7);
+    const fx = cx + Math.cos(a) * r * 0.78, fy = cy + Math.sin(a) * r * 0.78 * squash;
+    return <Ink key={"f" + k} c="s0" d={`M${r1(fx)} ${r1(fy)}q${r1(2 * s)} ${r1(-2 * s)} ${r1(4 * s)} 0`} />;
   });
   return (
     <>
       <Ink c="s1 occlude" d={d + "Z"} />
-      {texture}
+      {hatch}
+      {flicks}
     </>
   );
 }
@@ -45,10 +58,12 @@ export function Tree({ kind, x, y, s, rng }: { kind: Trees; x: number; y: number
       const th = 26 * s;
       return (
         <g>
-          <Ink c="s1" d={seg(x - 2 * s, y, x - 1.5 * s, y - th) + seg(x + 2 * s, y, x + 1.5 * s, y - th)} />
-          {scallopCrown(x - 8 * s, y - th - 8 * s, 13 * s, rng, s)}
-          {scallopCrown(x + 9 * s, y - th - 10 * s, 12 * s, rng, s)}
-          {scallopCrown(x, y - th - 22 * s, 14 * s, rng, s)}
+          <Ink c="s1" d={`M${r1(x - 3 * s)} ${r1(y)}Q${r1(x - 1 * s)} ${r1(y - th * 0.5)} ${r1(x - 2.5 * s)} ${r1(y - th)}M${r1(x + 3 * s)} ${r1(y)}Q${r1(x + 1 * s)} ${r1(y - th * 0.5)} ${r1(x + 2 * s)} ${r1(y - th)}`} />
+          <Ink c="s0" d={seg(x, y - th * 0.7, x + 7 * s, y - th - 4 * s) + seg(x - 1 * s, y - th * 0.8, x - 8 * s, y - th - 2 * s)} />
+          {scallopCrown(x - 9 * s, y - th - 6 * s, 11 * s, rng, s)}
+          {scallopCrown(x + 9 * s, y - th - 8 * s, 10.5 * s, rng, s)}
+          {scallopCrown(x - 2 * s, y - th - 19 * s, 13 * s, rng, s)}
+          {scallopCrown(x + 5 * s, y - th - 30 * s, 9 * s, rng, s)}
         </g>
       );
     }

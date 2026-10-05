@@ -12,25 +12,51 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { site } from "@/content/site";
 import type { Pt } from "@/components/bookworld/geometry";
+import { createRng, r1 } from "@/lib/rng";
 import { sparkle } from "@/components/bookworld/sky";
 import { StarMark } from "@/components/ui/Ornament";
 
 const W = 1600, H = 900;
 
-/* The constellation's stars sit exactly where the landscape's high points will be. */
+/* The constellation's main stars sit exactly where the landscape's high points will be. */
 const STARS: Pt[] = [
-  [200, 416], //  0 lighthouse lantern
-  [330, 210], //  1
-  [560, 132], //  2
-  [800, 96], //   3
-  [1110, 150], // 4
-  [1400, 236], // 5
-  [1500, 420], // 6
-  [1380, 532], // 7 crown of the oak
-  [1000, 352], // 8 clock-tower spire
-  [600, 506], //  9 campanile cross
+  [200, 424], //   0 lighthouse lantern
+  [318, 262], //   1
+  [478, 146], //   2
+  [742, 98], //    3
+  [918, 176], //   4
+  [1196, 122], //  5
+  [1372, 262], //  6
+  [1528, 348], //  7
+  [1420, 574], //  8 crown of the oak
+  [1066, 366], //  9 clock-tower spire
+  [560, 554], //  10 campanile cross
+  [704, 604], //  11 temple columns
 ];
-const EDGES: [number, number][] = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [4, 8], [0, 9]];
+
+/* "fade" lines thin away into the dark before reaching their star. */
+const EDGES: { a: number; b: number; fade?: boolean }[] = [
+  { a: 0, b: 1 }, { a: 1, b: 2 }, { a: 2, b: 3 }, { a: 3, b: 4 }, { a: 4, b: 5, fade: true },
+  { a: 5, b: 6 }, { a: 6, b: 7 }, { a: 7, b: 8, fade: true }, { a: 4, b: 9 }, { a: 0, b: 10, fade: true }, { a: 3, b: 11, fade: true },
+];
+
+/* Tiny secondary stars and marginal marks, scattered irregularly. */
+const MINOR = (() => {
+  const rng = createRng("hero-minor-stars");
+  // a few more gathered in the centre, which is all a phone sees
+  return Array.from({ length: 100 }, (_, i) => ({
+    x: r1(i < 70 ? rng.range(80, 1540) : rng.range(600, 1000)),
+    y: r1(rng.range(40, 520)),
+    r: r1(rng.range(0.6, 1.6)),
+    o: r1(rng.range(0.35, 0.85)),
+    spark: rng.chance(0.14),
+    d: r1(rng.range(0, 9)),
+  })).filter((s) => !(s.x > 380 && s.x < 1220 && s.y > 300 && s.y < 470)); // keep the title clear
+})();
+
+function partial(a: Pt, b: Pt, t: number): Pt {
+  return [r1(a[0] + (b[0] - a[0]) * t), r1(a[1] + (b[1] - a[1]) * t)];
+}
 
 export function HomeHero({ landscape }: { landscape: React.ReactNode[] }) {
   const ref = useRef<HTMLElement>(null);
@@ -84,21 +110,47 @@ export function HomeHero({ landscape }: { landscape: React.ReactNode[] }) {
           </motion.g>
 
           <motion.g style={{ y: skyY }}>
+            {/* minor stars and marginalia */}
+            <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 3, delay: 1.5 }}>
+              {MINOR.map((m, i) =>
+                m.spark ? (
+                  <path key={i} d={sparkle(m.x, m.y, 4 + m.r * 2)} fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${m.d}s`, ["--o" as string]: m.o }} />
+                ) : (
+                  <circle key={i} cx={m.x} cy={m.y} r={m.r} fill="var(--color-gold-soft)" opacity={m.o} />
+                ),
+              )}
+              {/* a fragment of an orbit, a small ringed planet, a tiny crescent, survey crosses */}
+              <path d="M1250 70A380 380 0 0 1 1560 260" fill="none" stroke="var(--color-faded)" strokeWidth="0.6" strokeDasharray="1 6" />
+              <circle cx="1408" cy="128" r="3.2" fill="none" stroke="var(--color-gold)" strokeWidth="0.6" />
+              <ellipse cx="1408" cy="128" rx="8" ry="2.2" fill="none" stroke="var(--color-gold)" strokeWidth="0.5" transform="rotate(-18 1408 128)" />
+              <path d="M262 92a9 9 0 1 0 9 13a7 7 0 1 1 -9 -13z" fill="var(--color-gold-soft)" opacity="0.8" />
+              <path d="M640 210h8M644 206v8M1290 420h6M1293 417v6M140 300h6M143 297v6" stroke="var(--color-gold)" strokeWidth="0.6" opacity="0.7" />
+              <text x="752" y="88" fontSize="10" fill="var(--color-gold)" opacity="0.6" fontStyle="italic" fontFamily="var(--font-display)">α</text>
+              <text x="1206" y="112" fontSize="10" fill="var(--color-gold)" opacity="0.6" fontStyle="italic" fontFamily="var(--font-display)">β</text>
+              <text x="328" y="254" fontSize="10" fill="var(--color-gold)" opacity="0.6" fontStyle="italic" fontFamily="var(--font-display)">γ</text>
+            </motion.g>
+
             <motion.g style={{ opacity: linesOpacity }}>
-              {EDGES.map(([a, b], i) => (
-                <motion.line
-                  key={i}
-                  x1={STARS[a][0]} y1={STARS[a][1]} x2={STARS[b][0]} y2={STARS[b][1]}
-                  stroke="var(--color-gold)" strokeWidth="1" strokeOpacity="0.7"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.8, delay: 0.6 + i * 0.32, ease: [0.22, 0.61, 0.36, 1] }}
-                />
-              ))}
+              {EDGES.map(({ a, b, fade }, i) => {
+                const end = fade ? partial(STARS[a], STARS[b], 0.58) : STARS[b];
+                const tail = fade ? partial(STARS[a], STARS[b], 0.8) : null;
+                return (
+                  <g key={i}>
+                    <motion.line
+                      x1={STARS[a][0]} y1={STARS[a][1]} x2={end[0]} y2={end[1]}
+                      stroke="var(--color-gold)" strokeWidth="0.8" strokeOpacity={fade ? 0.45 : 0.6}
+                      initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                      transition={{ duration: 2.2, delay: 0.6 + i * 0.34, ease: [0.22, 0.61, 0.36, 1] }}
+                    />
+                    {tail && <line x1={end[0]} y1={end[1]} x2={tail[0]} y2={tail[1]} stroke="var(--color-gold)" strokeWidth="0.6" strokeOpacity="0.3" strokeDasharray="1 5" />}
+                  </g>
+                );
+              })}
             </motion.g>
             {STARS.map(([x, y], i) => (
-              <motion.g key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, delay: 0.3 + i * 0.25 }}>
-                <circle cx={x} cy={y} r="22" fill="url(#hero-halo)" />
-                <path d={sparkle(x, y, i % 3 === 0 ? 11 : 8)} fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${i * 0.7}s`, ["--t" as string]: "6s", ["--o" as string]: 1 }} />
+              <motion.g key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.6, delay: 0.3 + i * 0.22 }}>
+                <circle cx={x} cy={y} r={i % 4 === 0 ? 24 : 16} fill="url(#hero-halo)" />
+                <path d={sparkle(x, y, i % 4 === 0 ? 11 : i % 3 === 0 ? 8 : 6)} fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${i * 0.7}s`, ["--t" as string]: "6s", ["--o" as string]: 1 }} />
               </motion.g>
             ))}
           </motion.g>

@@ -13,6 +13,8 @@ export interface BuildingProps {
   s: number;
   rng: Rng;
   smoke?: boolean;
+  /** Chance (0–1) that each window is lit. Leave out for the default mix. */
+  lit?: number;
 }
 
 /* ── Windows ───────────────────────────────────────────────────────────── */
@@ -54,7 +56,7 @@ export function Smoke({ x, y, s, rng }: { x: number; y: number; s: number; rng: 
 
 /* ── Georgian country house ────────────────────────────────────────────── */
 
-export function CountryHouse({ x, y, s, rng, smoke }: BuildingProps) {
+export function CountryHouse({ x, y, s, rng, smoke, lit }: BuildingProps) {
   const W = 250 * s, H = 86 * s;
   const L = x - W / 2;
   const roofH = 32 * s;
@@ -88,13 +90,13 @@ export function CountryHouse({ x, y, s, rng, smoke }: BuildingProps) {
     for (let c = 0; c < wingCols; c++) {
       const span = (W - pw) / 2;
       const wx = side < 0 ? L + 12 * s + c * (span - 24 * s) / (wingCols - 1) - ww / 2 + 4 * s : x + pw / 2 + 12 * s + c * (span - 24 * s) / (wingCols - 1) - ww / 2 - 4 * s;
-      els.push(<Win key={`u${side}${c}`} x={wx} y={y - H + 12 * s} w={ww} h={16 * s} rng={rng} />);
-      els.push(<Win key={`l${side}${c}`} x={wx} y={y - H * 0.48 + 7 * s} w={ww} h={21 * s} rng={rng} />);
+      els.push(<Win key={`u${side}${c}`} x={wx} y={y - H + 12 * s} w={ww} h={16 * s} rng={rng} litChance={lit} />);
+      els.push(<Win key={`l${side}${c}`} x={wx} y={y - H * 0.48 + 7 * s} w={ww} h={21 * s} rng={rng} litChance={lit} />);
     }
   });
-  els.push(<Win key="pu" x={x - ww / 2} y={y - H + 12 * s} w={ww} h={16 * s} rng={rng} litChance={0.6} />);
+  els.push(<Win key="pu" x={x - ww / 2} y={y - H + 12 * s} w={ww} h={16 * s} rng={rng} litChance={lit ?? 0.6} />);
   // door and steps
-  els.push(<Win key="door" x={x - 8 * s} y={y - 34 * s} w={16 * s} h={28 * s} rng={rng} arched bars={1} litChance={0.7} />);
+  els.push(<Win key="door" x={x - 8 * s} y={y - 34 * s} w={16 * s} h={28 * s} rng={rng} arched bars={1} litChance={lit ?? 0.7} />);
   for (let i = 0; i < 3; i++) els.push(<Ink key={"st" + i} c="s0" d={seg(x - (12 + i * 4) * s, y - 4 * s + i * 2 * s, x + (12 + i * 4) * s, y - 4 * s + i * 2 * s)} />);
   if (smoke) els.push(<Smoke key="smoke" x={chimneys[1]} y={y - H - roofH - 16 * s} s={s} rng={rng} />);
   return <g>{els}</g>;
@@ -102,7 +104,7 @@ export function CountryHouse({ x, y, s, rng, smoke }: BuildingProps) {
 
 /* ── Jacobean manor: a long range of gables with a gatehouse ───────────── */
 
-export function Manor({ x, y, s, rng, smoke }: BuildingProps) {
+export function Manor({ x, y, s, rng, smoke, lit }: BuildingProps) {
   const W = 400 * s, H = 58 * s;
   const L = x - W / 2;
   const els: ReactNode[] = [];
@@ -131,11 +133,11 @@ export function Manor({ x, y, s, rng, smoke }: BuildingProps) {
   for (let i = 0; i < gables; i++) {
     const gx = L + i * gw;
     els.push(<Ink key={"fin" + i} c="s0" d={seg(gx + gw / 2, y - H - 24 * s, gx + gw / 2, y - H - 31 * s)} />);
-    els.push(<Win key={"gw" + i} x={gx + gw / 2 - 5 * s} y={y - H - 12 * s} w={10 * s} h={9 * s} rng={rng} bars={1} litChance={0.2} />);
+    els.push(<Win key={"gw" + i} x={gx + gw / 2 - 5 * s} y={y - H - 12 * s} w={10 * s} h={9 * s} rng={rng} bars={1} litChance={lit ?? 0.2} />);
     // mullioned windows on two floors
     [y - H + 10 * s, y - H + 32 * s].forEach((wy, k) => {
       if (i === 3 || i === 4) return;
-      els.push(<Win key={`mw${i}${k}`} x={gx + gw / 2 - 11 * s} y={wy} w={22 * s} h={14 * s} rng={rng} bars={2} />);
+      els.push(<Win key={`mw${i}${k}`} x={gx + gw / 2 - 11 * s} y={wy} w={22 * s} h={14 * s} rng={rng} bars={2} litChance={lit} />);
     });
   }
   els.push(<Ink key="string" c="s0" d={seg(L, y - H + 27 * s, L + W, y - H + 27 * s)} />);
@@ -150,17 +152,17 @@ export function Manor({ x, y, s, rng, smoke }: BuildingProps) {
     }
     crenels.push([tx + 15 * s, y - th], [tx + 15 * s, y]);
     els.push(<Ink key={"tw" + i} c="s1 occlude" d={poly(crenels)} />);
-    for (let k = 0; k < 3; k++) els.push(<Win key={`tww${i}${k}`} x={tx - 4 * s} y={y - th + 14 * s + k * 26 * s} w={8 * s} h={14 * s} rng={rng} bars={1} />);
+    for (let k = 0; k < 3; k++) els.push(<Win key={`tww${i}${k}`} x={tx - 4 * s} y={y - th + 14 * s + k * 26 * s} w={8 * s} h={14 * s} rng={rng} bars={1} litChance={lit} />);
   });
   els.push(<Ink key="gate" c="s1 occlude" d={rect(x - 15 * s, y - 70 * s, 30 * s, 70 * s)} />);
-  els.push(<Win key="arch" x={x - 10 * s} y={y - 34 * s} w={20 * s} h={34 * s} rng={rng} arched bars={1} litChance={0.8} />);
-  els.push(<Win key="oriel" x={x - 9 * s} y={y - 62 * s} w={18 * s} h={18 * s} rng={rng} bars={2} litChance={0.8} />);
+  els.push(<Win key="arch" x={x - 10 * s} y={y - 34 * s} w={20 * s} h={34 * s} rng={rng} arched bars={1} litChance={lit ?? 0.8} />);
+  els.push(<Win key="oriel" x={x - 9 * s} y={y - 62 * s} w={18 * s} h={18 * s} rng={rng} bars={2} litChance={lit ?? 0.8} />);
   return <g>{els}</g>;
 }
 
 /* ── A terrace of tall city houses ─────────────────────────────────────── */
 
-export function Townhouses({ x, y, s, rng, smoke }: BuildingProps) {
+export function Townhouses({ x, y, s, rng, smoke, lit }: BuildingProps) {
   const count = 7;
   const widths = Array.from({ length: count }, () => rng.range(50, 66) * s);
   const total = widths.reduce((a, b) => a + b, 0);
@@ -187,7 +189,7 @@ export function Townhouses({ x, y, s, rng, smoke }: BuildingProps) {
     floors.forEach((f, k) => {
       if (f.y + f.h > y - 48 * s) return;
       for (let b = 0; b < bays; b++) {
-        els.push(<Win key={`w${i}${k}${b}`} x={L + gap + b * (ww + gap)} y={f.y} w={ww} h={f.h} rng={rng} litChance={0.32} />);
+        els.push(<Win key={`w${i}${k}${b}`} x={L + gap + b * (ww + gap)} y={f.y} w={ww} h={f.h} rng={rng} litChance={lit ?? 0.32} />);
       }
       if (k === 2) els.push(<Ink key={"bal" + i} c="s0" d={line([[L + gap - 3 * s, f.y + f.h + 3 * s], [L + w - gap + 3 * s, f.y + f.h + 3 * s]])} />);
     });
@@ -195,8 +197,8 @@ export function Townhouses({ x, y, s, rng, smoke }: BuildingProps) {
     const doorLeft = i % 2 === 0;
     const dx = doorLeft ? L + gap : L + w - gap - 12 * s;
     els.push(<Ink key={"door" + i} c="s0" d={rect(dx, y - 30 * s, 12 * s, 24 * s)} />);
-    els.push(<Win key={"fan" + i} x={dx} y={y - 38 * s} w={12 * s} h={8 * s} rng={rng} arched bars={0} litChance={0.45} />);
-    els.push(<Win key={"gw" + i} x={doorLeft ? L + w - gap - 16 * s : L + gap} y={y - 34 * s} w={16 * s} h={22 * s} rng={rng} litChance={0.4} />);
+    els.push(<Win key={"fan" + i} x={dx} y={y - 38 * s} w={12 * s} h={8 * s} rng={rng} arched bars={0} litChance={lit ?? 0.45} />);
+    els.push(<Win key={"gw" + i} x={doorLeft ? L + w - gap - 16 * s : L + gap} y={y - 34 * s} w={16 * s} h={22 * s} rng={rng} litChance={lit ?? 0.4} />);
     for (let k = 0; k < 2; k++) els.push(<Ink key={`step${i}${k}`} c="s0" d={seg(dx - 2 * s - k * 2 * s, y - 6 * s + k * 3 * s, dx + 14 * s + k * 2 * s, y - 6 * s + k * 3 * s)} />);
     cx += w;
   });
@@ -209,7 +211,7 @@ export function Townhouses({ x, y, s, rng, smoke }: BuildingProps) {
 
 /* ── Cottage ───────────────────────────────────────────────────────────── */
 
-export function Cottage({ x, y, s, rng, smoke }: BuildingProps) {
+export function Cottage({ x, y, s, rng, smoke, lit }: BuildingProps) {
   const W = 80 * s, H = 34 * s;
   const L = x - W / 2;
   const els: ReactNode[] = [];
@@ -221,15 +223,15 @@ export function Cottage({ x, y, s, rng, smoke }: BuildingProps) {
     els.push(<Ink key={"th" + i} c="s0" d={seg(L + 14 * s + t * (W - 28 * s), y - H - 28 * s, L - 4 * s + t * (W + 8 * s), y - H - 2 * s)} />);
   }
   els.push(<Ink key="body" c="s1 occlude" d={rect(L, y - H, W, H)} />);
-  els.push(<Win key="w1" x={L + 10 * s} y={y - H + 9 * s} w={14 * s} h={12 * s} rng={rng} litChance={0.7} />);
-  els.push(<Win key="w2" x={L + W - 24 * s} y={y - H + 9 * s} w={14 * s} h={12 * s} rng={rng} litChance={0.7} />);
+  els.push(<Win key="w1" x={L + 10 * s} y={y - H + 9 * s} w={14 * s} h={12 * s} rng={rng} litChance={lit ?? 0.7} />);
+  els.push(<Win key="w2" x={L + W - 24 * s} y={y - H + 9 * s} w={14 * s} h={12 * s} rng={rng} litChance={lit ?? 0.7} />);
   els.push(<Ink key="door" c="s0" d={rect(x - 6 * s, y - 24 * s, 12 * s, 24 * s)} />);
   return <g>{els}</g>;
 }
 
 /* ── A cluster of low Mediterranean houses ─────────────────────────────── */
 
-export function Village({ x, y, s, rng, smoke }: BuildingProps) {
+export function Village({ x, y, s, rng, smoke, lit }: BuildingProps) {
   const houses = Array.from({ length: 9 }, (_, i) => ({
     dx: rng.range(-160, 160) * s,
     depth: i < 4 ? 1 : 0,
@@ -249,8 +251,8 @@ export function Village({ x, y, s, rng, smoke }: BuildingProps) {
     const cols = Math.max(1, Math.floor(w / (14 * s)));
     for (let c = 0; c < cols; c++) {
       const wx = L + (c + 0.5) * (w / cols) - 3 * s;
-      els.push(<Win key={`w${i}${c}`} x={wx} y={base - h + 7 * s} w={6 * s} h={8 * s} rng={rng} bars={1} litChance={0.45} />);
-      if (h > 34 * s) els.push(<Win key={`v${i}${c}`} x={wx} y={base - h + 22 * s} w={6 * s} h={9 * s} rng={rng} bars={1} litChance={0.35} arched />);
+      els.push(<Win key={`w${i}${c}`} x={wx} y={base - h + 7 * s} w={6 * s} h={8 * s} rng={rng} bars={1} litChance={lit ?? 0.45} />);
+      if (h > 34 * s) els.push(<Win key={`v${i}${c}`} x={wx} y={base - h + 22 * s} w={6 * s} h={9 * s} rng={rng} bars={1} litChance={lit ?? 0.35} arched />);
     }
     if (smoke && i === houses.length - 2) els.push(<Smoke key="sm" x={L + w * 0.7} y={base - h - pitch} s={s * 0.8} rng={rng} />);
   });

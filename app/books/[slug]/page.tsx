@@ -39,7 +39,9 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
       {/* ── The world ── */}
       <header className="px-3 pt-24 sm:px-8 sm:pt-28">
         <div className="mx-auto max-w-7xl">
-          <BookWorld book={book} animate label={`An engraved illustration of the world of ${book.title}.`} />
+          {/* wide plate on larger screens; a large round medallion on phones, where detail matters more than width */}
+          <BookWorld book={book} animate className="hidden sm:block" label={`An engraved illustration of the world of ${book.title}.`} />
+          <BookWorld book={book} variant="vignette" animate className="mx-auto max-w-[30rem] sm:hidden" label={`An engraved illustration of the world of ${book.title}.`} />
           <p className="label mt-4 flex justify-between text-[0.7rem] text-gold-deep">
             <span>Plate {roman(book.plate)}</span>
             <span className="hidden sm:inline">{book.locations[0]}</span>

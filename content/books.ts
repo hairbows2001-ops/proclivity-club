@@ -73,6 +73,17 @@
  *    },
  *  },
  *
+ *    Optional art direction for `world` (gives a book a composed scene):
+ *      art: {
+ *        scene: "lighthouse-bay",   // one of the hand-composed scenes in
+ *                                   // components/bookworld/scenes.tsx
+ *        density: "medium-high",    // sparse | medium | medium-high | dense
+ *        focalPoint: "…", composition: "…", foreground: "…",
+ *        middleGround: "…", background: "…", atmosphere: "…",
+ *        goldEmphasis: "…", secondaryMotifs: ["…"],
+ *      },
+ *    Without `art.scene`, the site composes the world from the settings above.
+ *
  *    Optional extras for `world`:
  *      water: "river"            adds a river to any landscape
  *      landmarkSide: "left"      or "right" — which side the landmark stands
@@ -115,6 +126,18 @@ And then Lily Briscoe, at the end, at her easel, making a single line down the c
       details: ["boat", "figures", "path", "birds"],
       symbol: "compass",
       landmarkSide: "right",
+      art: {
+        scene: "lighthouse-bay",
+        density: "medium-high",
+        focalPoint: "The lighthouse lamp, across still water",
+        composition: "Coastline enters from the lower left; lighthouse in the middle distance, slightly right of centre; the house barely visible on the far shore",
+        foreground: "A grassy bank with flowers, a path to a little jetty, Lily at her easel; textured water marks lower right",
+        middleGround: "The lighthouse on its rocks, a small sailing boat",
+        background: "Faint hills, the house among trees, constellation fragments",
+        atmosphere: "Still, suspended, late evening; low mist",
+        goldEmphasis: "The lamp and its reflection, and one star",
+        secondaryMotifs: ["boat", "path", "house", "crescent", "flowers"],
+      },
     },
   },
 
@@ -149,6 +172,18 @@ What remained was the oak — a single tree that stays while centuries, costumes
       details: ["figures", "path", "birds", "smoke"],
       symbol: "hourglass",
       landmarkSide: "left",
+      art: {
+        scene: "oak-and-great-house",
+        density: "medium-high",
+        focalPoint: "The oak tree on the hill",
+        composition: "The oak fills the left of the plate on a crest; the great house sits small in the valley at the end of an avenue",
+        foreground: "The hillside, grasses and the poet beneath the tree",
+        middleGround: "Rolling downs, ploughed fields, hedgerows, an avenue of trees",
+        background: "The great house with its chimneys smoking; a full moon",
+        atmosphere: "Clear, timeless, faintly comic",
+        goldEmphasis: "The moon and the windows of the house",
+        secondaryMotifs: ["avenue", "hourglass", "birds"],
+      },
     },
   },
 
@@ -184,6 +219,18 @@ What remained was the aeroplane: the whole city looking up, each person reading 
       details: ["figures", "aeroplane", "birds"],
       symbol: "orbit",
       landmarkSide: "left",
+      art: {
+        scene: "westminster-morning",
+        density: "dense",
+        focalPoint: "The clock tower across the river",
+        composition: "Westminster Bridge enters from the left in perspective; the city crowds the far bank; the tower right of centre",
+        foreground: "The bridge with lamps and passers-by",
+        middleGround: "The river, rowing boats, the embankment wall",
+        background: "The long gothic range, terraces, St Paul's far off; an aeroplane writing in the sky",
+        atmosphere: "A bright, crowded June evening",
+        goldEmphasis: "The clock face and its reflection",
+        secondaryMotifs: ["aeroplane", "bridge lamps", "boats", "birds"],
+      },
     },
   },
 
@@ -217,6 +264,18 @@ What remained was the idea of winter as a season that holds something in reserve
       details: ["figures", "path", "smoke"],
       symbol: "eye",
       landmarkSide: "right",
+      art: {
+        scene: "winter-house",
+        density: "medium",
+        focalPoint: "One lit window in a cold, distant house",
+        composition: "A wide, deliberately empty moor; the house far off right of centre; a great bare tree in the right foreground",
+        foreground: "Frosted ground, a track, the bare tree's branches reaching into the sky",
+        middleGround: "A field wall leading to the house, a pierced standing stone, a lone figure",
+        background: "Bare poplars behind the house; thin lines of cold air; a pale ringed sun",
+        atmosphere: "Snow, stillness, intentional emptiness",
+        goldEmphasis: "The single lit window",
+        secondaryMotifs: ["frost", "wall", "sculpture", "smoke"],
+      },
     },
   },
 
@@ -253,6 +312,18 @@ What remained was the rowing: a whole night of it, hands blistering, Catherine h
       details: ["boat", "figures"],
       symbol: "key",
       landmarkSide: "left",
+      art: {
+        scene: "lake-crossing",
+        density: "medium-high",
+        focalPoint: "A small boat rowing through the rain",
+        composition: "Mountains close in from behind; the lake fills the middle; the boat left of centre; cypresses at the near shore",
+        foreground: "Cypresses and a watching figure on the near shore",
+        middleGround: "The boat with its umbrella, the dark water",
+        background: "Three ranges of mountains, the village and campanile, lights along the shore",
+        atmosphere: "Night rain",
+        goldEmphasis: "The lights of the far shore and their reflections",
+        secondaryMotifs: ["umbrella", "campanile", "crescent"],
+      },
     },
   },
 

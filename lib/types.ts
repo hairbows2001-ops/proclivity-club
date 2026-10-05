@@ -78,6 +78,32 @@ export type CelestialSymbol =
   | "orbit"
   | "none";
 
+/**
+ * Hand-composed scenes. Each is a deliberate composition (see
+ * components/bookworld/scenes.tsx) built from the shared line-art primitives.
+ */
+export type SceneName = "lighthouse-bay" | "oak-and-great-house" | "westminster-morning" | "winter-house" | "lake-crossing";
+
+/**
+ * Optional art direction. `scene` chooses a composed scene; `density` sets
+ * how much fine detail is engraved. The other fields are the written brief
+ * for the composition — they document intent and guide whoever composes it.
+ */
+export interface ArtDirection {
+  /** A hand-composed scene. Leave out to let the site compose one from the settings above. */
+  scene?: SceneName;
+  /** How much fine detail: "sparse" | "medium" | "medium-high" | "dense". */
+  density?: "sparse" | "medium" | "medium-high" | "dense";
+  focalPoint?: string;
+  composition?: string;
+  foreground?: string;
+  middleGround?: string;
+  background?: string;
+  atmosphere?: string;
+  goldEmphasis?: string;
+  secondaryMotifs?: string[];
+}
+
 export interface BookWorldConfig {
   landscape: Landscape;
   landmark?: Landmark;
@@ -93,6 +119,8 @@ export interface BookWorldConfig {
   landmarkSide?: "left" | "right";
   /** Any number. Changing it reshuffles stars, hills and trees without changing anything else. */
   seed?: number;
+  /** Optional art direction — see ArtDirection above. */
+  art?: ArtDirection;
 }
 
 /* ── Books ──────────────────────────────────────────────────────────────── */

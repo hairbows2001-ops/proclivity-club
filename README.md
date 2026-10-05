@@ -85,6 +85,25 @@ The `world` settings choose what appears in the engraving. Hover over any field 
 | `landmarkSide` | `left` or `right` |
 | `seed`         | any number — reshuffles stars, hills and trees if you'd like a different arrangement |
 
+### Art direction (optional, for important books)
+
+A book can be given a hand-composed scene instead of an automatic one by adding an `art` block inside `world`:
+
+```ts
+art: {
+  scene: "lighthouse-bay",     // a composed scene from components/bookworld/scenes.tsx
+  density: "medium-high",      // sparse | medium | medium-high | dense
+  focalPoint: "The lighthouse lamp, across still water",
+  composition: "Coastline enters from the lower left…",
+  foreground: "…", middleGround: "…", background: "…",
+  atmosphere: "Still, suspended, late evening",
+  goldEmphasis: "The lamp and one star",
+  secondaryMotifs: ["boat", "path", "house"],
+},
+```
+
+`scene` and `density` change the drawing. The other fields are the written brief for the composition: they record the intent, so that whoever composes a new scene (you, a designer, or Claude) knows what it should feel like. The five current scenes are `lighthouse-bay`, `oak-and-great-house`, `westminster-morning`, `winter-house` and `lake-crossing`. Books without `art.scene` are composed automatically, so nothing breaks if you leave it out.
+
 ### Adding a cover image (optional)
 
 Put the image in `public/covers/` (for example `public/covers/the-waves.jpg`) and add `cover: "/covers/the-waves.jpg",` to the book.

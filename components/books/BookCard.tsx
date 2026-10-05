@@ -11,7 +11,7 @@ export function BookCard({ book, headingLevel = "h3" }: { book: Book; headingLev
   const H = headingLevel;
   return (
     <article className="group relative text-center">
-      <div className="relative mx-auto aspect-square w-full max-w-[18rem] transition-transform duration-[1.6s] ease-[var(--ease-ink)] group-hover:scale-[1.025]">
+      <div className="relative mx-auto aspect-square w-full max-w-[26rem] sm:max-w-[18rem] transition-transform duration-[1.6s] ease-[var(--ease-ink)] group-hover:scale-[1.025]">
         <BookWorld book={book} variant="vignette" />
       </div>
       <p className="label mt-7 text-gold-deep">
