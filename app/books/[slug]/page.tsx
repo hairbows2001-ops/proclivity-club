@@ -41,11 +41,12 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
         <div className="mx-auto max-w-7xl">
           {/* wide plate on larger screens; a large round medallion on phones, where detail matters more than width */}
           <BookWorld book={book} animate className="hidden sm:block" label={`An engraved illustration of the world of ${book.title}.`} />
-          <BookWorld book={book} variant="vignette" animate className="mx-auto max-w-[30rem] sm:hidden" label={`An engraved illustration of the world of ${book.title}.`} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/worlds/${book.slug}/medallion-ink.svg`} alt={`An engraved illustration of the world of ${book.title}.`} width={700} height={700} loading="lazy" className="mx-auto block h-auto w-full max-w-[30rem] sm:hidden" />
           <p className="label mt-4 flex justify-between text-[0.7rem] text-gold-deep">
             <span>Plate {roman(book.plate)}</span>
             <span className="hidden sm:inline">{book.locations[0]}</span>
-            <span>{book.year}</span>
+            <span>{book.yearLabel}</span>
           </p>
         </div>
         <div className="mx-auto max-w-3xl pt-16 text-center">
@@ -56,7 +57,7 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
           </nav>
           <h1 className="display mt-6 text-5xl text-parchment sm:text-7xl">{book.title}</h1>
           <p className="mt-5 text-xl text-mist italic">
-            <Link href={`/authors/${book.authorSlug}`} className="link-ink">{book.author}</Link>, {book.year}
+            <Link href={`/authors/${book.authorSlug}`} className="link-ink">{book.author}</Link>, {book.yearLabel}
           </p>
           <Ornament className="mt-12" />
         </div>

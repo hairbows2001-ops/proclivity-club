@@ -60,6 +60,25 @@ export const themes: Record<string, ThemeInput> = {
     description: "Being a stranger — in a city, a family, a country, or one's own mind.",
   },
 
+  Art: {
+    latin: "Ars",
+    description:
+      "Books about making things and looking at them — paintings, poems, films, sentences — and what that attention does to a life.",
+  },
+  Fate: {
+    latin: "Fatum",
+    description:
+      "Gods, predestination, history's long tide: books in which people act freely and are carried anyway.",
+  },
+  Performance: {
+    latin: "Theatrum",
+    description: "Masks, roles, disguises and second selves. Books that know the world is a stage, and ask who is underneath.",
+  },
+  Haunting: {
+    latin: "Umbra",
+    description: "Dread, doubles, the uncanny. Books in which something unseen presses on the edges of the page.",
+  },
+
   /* ↑ Add new constellation descriptions above this line, in the same format:
    *
    *   Solitude: {

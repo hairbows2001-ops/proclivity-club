@@ -36,6 +36,9 @@ const ORDERS = {
 };
 type Order = keyof typeof ORDERS;
 
+/** "1920s" → 1920, "460s BC" → -460, so decades sort in time order. */
+const decadeValue = (d: string) => (d.endsWith("BC") ? -parseInt(d, 10) : parseInt(d, 10));
+
 const NUMBERS = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"];
 
 export function LibraryBrowser({ entries }: { entries: LibraryEntry[] }) {
@@ -71,7 +74,8 @@ export function LibraryBrowser({ entries }: { entries: LibraryEntry[] }) {
   const options = useMemo(() => {
     const out = {} as Record<FacetKey, string[]>;
     FACETS.forEach(({ key }) => {
-      out[key] = [...new Set(entries.flatMap((e) => e.facets[key]))].sort((a, b) => a.localeCompare(b));
+      const values = [...new Set(entries.flatMap((e) => e.facets[key]))];
+      out[key] = key === "decade" ? values.sort((a, b) => decadeValue(a) - decadeValue(b)) : values.sort((a, b) => a.localeCompare(b));
     });
     return out;
   }, [entries]);

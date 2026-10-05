@@ -14,14 +14,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { SkyConstellation, SkyStar } from "@/lib/sky";
-import { ATLAS_W as W, ATLAS_H as H } from "@/lib/sky";
+import { ATLAS_W as W, ATLAS_H as H, MIN_GAP } from "@/lib/sky";
 import { createRng, r1 } from "@/lib/rng";
 import { CelestialMark, sparkle } from "@/components/bookworld/sky";
 
 export interface AtlasBook {
   title: string;
   author: string;
-  year: number;
+  year: string;
 }
 
 const GREEK = ["α", "β", "γ", "δ", "ε", "ζ", "η", "θ"];
@@ -143,10 +143,10 @@ export function AtlasMap({ constellations, books }: { constellations: SkyConstel
                     aria-label={`${b.title}, ${b.author}, ${b.year} — in ${c.theme.name}`}
                     className="cursor-pointer outline-none"
                   >
-                    <circle cx={s.x} cy={s.y} r="22" fill="transparent" />
-                    <circle cx={s.x} cy={s.y} r={r1(r * 2.6)} fill="url(#atlas-halo)" opacity={on ? 1 : 0.45} style={{ transition: "opacity 0.6s" }} />
-                    <path d={starPath(s.x, s.y, r)} fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${(i * 2.1) % 7}s`, ["--t" as string]: "7s", ["--o" as string]: 1 }} />
-                    {on && <circle cx={s.x} cy={s.y} r={r1(r + 8)} fill="none" stroke="var(--color-gold-soft)" strokeWidth="0.8" />}
+                    <circle cx={s.x} cy={s.y} r={MIN_GAP / 2} fill="transparent" />
+                    <circle cx={s.x} cy={s.y} r={r1(r * 2.6)} pointerEvents="none" fill="url(#atlas-halo)" opacity={on ? 1 : 0.45} style={{ transition: "opacity 0.6s" }} />
+                    <path d={starPath(s.x, s.y, r)} pointerEvents="none" fill="var(--color-gold-soft)" className="twinkle" style={{ ["--d" as string]: `${(i * 2.1) % 7}s`, ["--t" as string]: "7s", ["--o" as string]: 1 }} />
+                    {on && <circle cx={s.x} cy={s.y} r={r1(r + 8)} pointerEvents="none" fill="none" stroke="var(--color-gold-soft)" strokeWidth="0.8" />}
                     <text x={r1(s.x + r + 3)} y={r1(s.y - r + 2)} fontSize="11" fontStyle="italic" fill="var(--color-faded)" opacity="0.7" fontFamily="var(--font-display)">
                       {GREEK[c.stars.filter((t) => t.book).indexOf(s) % GREEK.length]}
                     </text>

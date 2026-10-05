@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default function AtlasPage() {
-  const bookInfo: Record<string, AtlasBook> = Object.fromEntries(books.map((b) => [b.slug, { title: b.title, author: b.author, year: b.year }]));
+  const bookInfo: Record<string, AtlasBook> = Object.fromEntries(books.map((b) => [b.slug, { title: b.title, author: b.author, year: b.yearLabel }]));
   return (
     <>
       <PageHeader eyebrow="The Atlas" title="A chart of the reading sky" subtitle="Every theme is a constellation and every book a star. A book that belongs to several constellations shines in each of them." />

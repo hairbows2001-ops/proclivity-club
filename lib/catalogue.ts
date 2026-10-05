@@ -50,7 +50,8 @@ export const books: Book[] = bookInputs.map((input, index) => {
     authorSlug: slugify(input.author),
     themeSlugs: [...new Set(input.themes.map(themeKey))],
     placeSlugs: [...new Set(input.locations.map(slugify))],
-    decade: `${Math.floor(input.year / 10) * 10}s`,
+    decade: input.year < 0 ? `${Math.ceil(-input.year / 10) * 10}s BC` : `${Math.floor(input.year / 10) * 10}s`,
+    yearLabel: input.year < 0 ? `${-input.year} BC` : String(input.year),
     plate: index + 1,
   };
 });
@@ -151,7 +152,8 @@ const unique = (values: string[]) => [...new Set(values)].sort((a, b) => a.local
 
 export const genres = unique(books.flatMap((b) => b.genres));
 export const moods = unique(books.flatMap((b) => b.moods));
-export const decades = unique(books.map((b) => b.decade));
+/** Decades in time order, oldest first. */
+export const decades = [...new Map([...books].sort((a, b) => a.year - b.year).map((b) => [b.decade, b.decade])).keys()];
 
 /* ── Relationships ──────────────────────────────────────────────────────── */
 

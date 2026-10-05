@@ -4,6 +4,9 @@
    ═════════════════════════════════════════════════════════════════════════ */
 
 @import "tailwindcss";
+/* Stroke weights, depth and motion for every engraving. Kept in its own file
+   so the static medallion images (app/worlds) can embed exactly the same rules. */
+@import "./etching.css";
 
 @theme {
   /* Palette — antique metallic ink on a midnight page */
@@ -126,20 +129,7 @@ a {
   border: 1px solid var(--rule);
 }
 
-/* ═════════════════════════════════════════════════════════════════════════
-   ILLUSTRATION INK
-   Stroke weights for every engraved SVG. --hair scales per context so lines
-   stay fine on large screens and legible on small ones.
-   ═════════════════════════════════════════════════════════════════════════ */
-
-.etching {
-  --hair: 0.85;
-  --ink: var(--color-gold);
-  --ink-soft: var(--color-gold-soft);
-  --ink-faint: var(--color-faded);
-  --bg: var(--color-midnight);
-}
-
+/* Engravings are block-level and scale to their container (utilities may override). */
 @layer base {
   .etching {
     display: block;
@@ -148,170 +138,3 @@ a {
   }
 }
 
-@media (max-width: 640px) {
-  .etching {
-    --hair: 1.15;
-  }
-}
-
-.etching .s,
-.etching .s0,
-.etching .s1,
-.etching .s2,
-.etching .sf {
-  fill: none;
-  stroke: var(--ink);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.etching .s0 { stroke-width: calc(var(--hair) * 0.55); opacity: 0.75; }
-.etching .s,
-.etching .s1 { stroke-width: var(--hair); }
-.etching .s2 { stroke-width: calc(var(--hair) * 1.6); }
-.etching .sf { stroke: var(--ink-faint); stroke-width: calc(var(--hair) * 0.7); opacity: 0.8; }
-.etching .occlude { fill: var(--bg); }
-
-/* Depth — aerial perspective in line. Far lines recede into faded blue,
-   near lines come forward a little brighter and firmer. */
-.etching .depth-far { opacity: 0.62; }
-.etching .depth-far :is(.s0, .s1, .s2) { stroke: color-mix(in srgb, var(--ink) 62%, var(--ink-faint)); }
-.etching .depth-mid :is(.s0, .s1, .s2) { stroke: color-mix(in srgb, var(--ink) 88%, var(--ink-faint)); }
-.etching .depth-near :is(.s1, .s2) { stroke: color-mix(in srgb, var(--ink) 78%, var(--ink-soft)); }
-.etching .depth-near .s1 { stroke-width: calc(var(--hair) * 1.12); }
-.etching .fill-ink { fill: var(--ink); stroke: none; }
-.etching .fill-soft { fill: var(--ink-soft); stroke: none; }
-.etching .fill-faint { fill: var(--ink-faint); stroke: none; }
-.etching text {
-  fill: var(--ink);
-  font-family: var(--font-display);
-}
-
-/* ── Illustration motion ──────────────────────────────────────────────── */
-
-@keyframes twinkle {
-  0%, 100% { opacity: var(--o, 0.9); }
-  50% { opacity: calc(var(--o, 0.9) * 0.3); }
-}
-.twinkle {
-  animation: twinkle var(--t, 5s) ease-in-out var(--d, 0s) infinite;
-}
-
-@keyframes window-glow {
-  0%, 30% { opacity: 0.12; }
-  60%, 100% { opacity: 0.85; }
-}
-.window-lit {
-  animation: window-glow var(--t, 9s) ease-in-out var(--d, 0s) infinite alternate;
-}
-
-@keyframes beam {
-  0%, 100% { opacity: 0.08; }
-  50% { opacity: 0.3; }
-}
-.beam {
-  opacity: 0.2;
-  animation: beam 8s ease-in-out infinite;
-}
-
-@keyframes drift {
-  from { transform: translateX(-30px); }
-  to { transform: translateX(30px); }
-}
-.drift {
-  animation: drift 40s ease-in-out infinite alternate;
-}
-
-/* Snow and rain are drawn twice, one plate-height apart, so the loop is seamless. */
-@keyframes fall {
-  from { transform: translateY(0); }
-  to { transform: translateY(780px); }
-}
-.fall {
-  animation: fall var(--t, 24s) linear infinite;
-}
-
-@keyframes rain {
-  from { transform: translate(0, 0); }
-  to { transform: translate(-160px, 780px); }
-}
-.rain {
-  animation: rain var(--t, 5s) linear infinite;
-}
-
-@keyframes clock-hand {
-  to { transform: rotate(360deg); }
-}
-.clock-hand {
-  transform-box: view-box;
-  animation: clock-hand var(--t, 240s) linear infinite;
-}
-
-@keyframes shoot {
-  0%, 92% { opacity: 0; transform: translate(0, 0); }
-  93% { opacity: 1; }
-  97% { opacity: 0; transform: translate(-260px, 130px); }
-  100% { opacity: 0; transform: translate(-260px, 130px); }
-}
-.shooting-star {
-  opacity: 0;
-  animation: shoot var(--t, 19s) ease-in var(--d, 4s) infinite;
-}
-
-/* Engraving that inks itself in, layer by layer, when a BookWorld plate first appears.
-   Every stroked path carries pathLength="1" so the dash maths is the same for all. */
-/* Strokes start fully transparent: zero-length dashes would otherwise show
-   their round caps as stray dots before the line begins to draw. */
-@keyframes ink-in {
-  0% { stroke-dashoffset: 1; stroke-opacity: 0; }
-  3% { stroke-opacity: 1; }
-  100% { stroke-dashoffset: 0; stroke-opacity: 1; }
-}
-.ink-in .s,
-.ink-in .s0,
-.ink-in .s1,
-.ink-in .s2,
-.ink-in .sf {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  stroke-opacity: 0;
-  animation: ink-in var(--dur, 3.2s) var(--ease-ink) var(--ld, 0s) forwards;
-}
-
-/* Scroll-driven version used on the homepage: --draw goes from 0 to 1. */
-.draw-by-scroll .s,
-.draw-by-scroll .s0,
-.draw-by-scroll .s1,
-.draw-by-scroll .s2,
-.draw-by-scroll .sf {
-  stroke-dasharray: 1;
-  stroke-dashoffset: calc(1 - var(--draw, 0));
-  stroke-opacity: clamp(0, calc(var(--draw, 0) * 40), 1);
-}
-
-/* Fills (lit windows, hidden backgrounds) arrive with their layer. */
-.draw-by-scroll :is(path, circle, rect, ellipse) {
-  fill-opacity: clamp(0, calc(var(--draw, 1) * 2.5 - 0.5), 1);
-}
-
-.draw-by-scroll .reflect {
-  opacity: var(--draw, 1);
-}
-
-/* Respect people who prefer less movement: everything appears, nothing moves. */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  .ink-in .s, .ink-in .s0, .ink-in .s1, .ink-in .s2, .ink-in .sf,
-  .draw-by-scroll .s, .draw-by-scroll .s0, .draw-by-scroll .s1, .draw-by-scroll .s2, .draw-by-scroll .sf {
-    stroke-dasharray: none;
-    stroke-dashoffset: 0;
-    stroke-opacity: 1;
-  }
-  .shooting-star { display: none; }
-  .window-lit { opacity: 0.7; }
-}

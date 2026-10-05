@@ -55,6 +55,30 @@ export function constellationEdges(points: { x: number; y: number }[], seed = 0)
 export const ATLAS_W = 1600;
 export const ATLAS_H = 1000;
 
+/** Smallest distance between two stars, so every star can be hovered and clicked. */
+export const MIN_GAP = 30;
+
+/** Gently push apart any stars closer than `gap`, keeping the figure's overall shape. */
+function separate(stars: SkyStar[], gap: number) {
+  for (let pass = 0; pass < 40; pass++) {
+    let moved = false;
+    for (let i = 0; i < stars.length; i++) {
+      for (let j = i + 1; j < stars.length; j++) {
+        const a = stars[i], b = stars[j];
+        let dx = b.x - a.x, dy = b.y - a.y;
+        const d = Math.hypot(dx, dy);
+        if (d >= gap) continue;
+        if (d < 0.01) { dx = 1; dy = 0; }
+        const push = (gap - d) / 2 / (d || 1);
+        a.x = r1(a.x - dx * push); a.y = r1(a.y - dy * push);
+        b.x = r1(b.x + dx * push); b.y = r1(b.y + dy * push);
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+}
+
 /** Lay out every constellation inside the oval of a planisphere (an old celestial chart). */
 export function layoutAtlas(themes: Theme[], books: Book[]): SkyConstellation[] {
   const size = 1000;
@@ -65,7 +89,7 @@ export function layoutAtlas(themes: Theme[], books: Book[]): SkyConstellation[] 
   // Largest constellations nearest the pole of the chart.
   const ordered = [...themes].sort((a, b) => b.books.length - a.books.length || a.name.localeCompare(b.name));
 
-  return ordered.map((theme, i) => {
+  const layout = ordered.map((theme, i) => {
     const r = Math.sqrt((i + 0.6) / n);
     const a = i * golden - Math.PI / 2;
     const cx = ATLAS_W / 2 + r * Math.cos(a) * ATLAS_W * 0.33;
@@ -74,7 +98,8 @@ export function layoutAtlas(themes: Theme[], books: Book[]): SkyConstellation[] 
 
     const anon = Math.max(0, 4 - theme.books.length) + rng.int(1, 2);
     const total = theme.books.length + anon;
-    const spread = size * (0.05 + Math.min(theme.books.length, 6) * 0.007);
+    // large constellations spread a little wider, so their stars stay apart
+    const spread = size * (0.05 + Math.min(theme.books.length, 6) * 0.007) * Math.max(1, Math.sqrt(theme.books.length / 6) * 0.9);
     const start = rng.range(0, Math.PI * 2);
 
     // Interleave book stars and anonymous stars round the figure.
@@ -94,8 +119,12 @@ export function layoutAtlas(themes: Theme[], books: Book[]): SkyConstellation[] 
       };
     });
 
+    separate(stars, MIN_GAP);
     return { theme, cx: r1(cx), cy: r1(cy), stars, edges: constellationEdges(stars, hash(theme.slug)) };
   });
+  // constellations near the pole can overlap: keep every star on the chart clear of every other
+  separate(layout.flatMap((c) => c.stars), MIN_GAP);
+  return layout;
 }
 
 /**

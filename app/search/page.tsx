@@ -13,9 +13,9 @@ export default function SearchPage() {
     ...books.map((b) => ({
       kind: "Book" as const,
       title: b.title,
-      subtitle: `${b.author}, ${b.year}`,
+      subtitle: `${b.author}, ${b.yearLabel}`,
       href: `/books/${b.slug}`,
-      text: norm(b.title, b.author, String(b.year), b.description, b.setting, b.reflection, b.quote?.text, ...b.themes, ...b.locations, ...b.moods, ...b.genres, b.world.landmark, b.world.landscape),
+      text: norm(b.title, b.author, b.yearLabel, b.description, b.setting, b.reflection, b.quote?.text, ...b.themes, ...b.locations, ...b.moods, ...b.genres, b.world.landmark, b.world.landscape),
     })),
     ...authors.map((a) => ({ kind: "Author" as const, title: a.name, subtitle: booksBySlugs(a.books).map((b) => b.title).join(" · "), href: `/authors/${a.slug}`, text: norm(a.name, a.bio) })),
     ...litThemes.map((t) => ({ kind: "Constellation" as const, title: t.name, subtitle: t.latin, href: `/constellations/${t.slug}`, text: norm(t.name, t.latin, t.description) })),

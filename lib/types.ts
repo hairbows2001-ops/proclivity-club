@@ -137,7 +137,7 @@ export interface BookInput {
   title: string;
   /** Full author name, exactly as you want it shown. The same spelling joins books to one author page. */
   author: string;
-  /** Year of first publication. */
+  /** Year of first publication. For works before the common era, use a minus sign: -458 means 458 BC. */
   year: number;
   /** Optional. The web address part, e.g. "to-the-lighthouse". Made from the title if left out. */
   slug?: string;
@@ -179,6 +179,8 @@ export interface Book extends Omit<BookInput, "slug" | "brightness"> {
   themeSlugs: string[];
   placeSlugs: string[];
   decade: string;
+  /** The year as it is shown, e.g. "1927" or "458 BC". */
+  yearLabel: string;
   /** 1-based order in the collection; shown as a Roman numeral plate number. */
   plate: number;
 }

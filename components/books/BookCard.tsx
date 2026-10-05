@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BookWorld } from "@/components/bookworld/BookWorld";
 import { roman } from "@/lib/format";
 import type { Book } from "@/lib/types";
 
@@ -12,10 +11,12 @@ export function BookCard({ book, headingLevel = "h3" }: { book: Book; headingLev
   return (
     <article className="group relative text-center">
       <div className="relative mx-auto aspect-square w-full max-w-[26rem] sm:max-w-[18rem] transition-transform duration-[1.6s] ease-[var(--ease-ink)] group-hover:scale-[1.025]">
-        <BookWorld book={book} variant="vignette" />
+        {/* a static engraving file, generated at build time (app/worlds), so many cards stay light */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`/worlds/${book.slug}/medallion.svg`} alt="" width={700} height={700} loading="lazy" decoding="async" className="block h-full w-full" />
       </div>
       <p className="label mt-7 text-gold-deep">
-        Plate {roman(book.plate)} <span aria-hidden>·</span> {book.year}
+        Plate {roman(book.plate)} <span aria-hidden>·</span> {book.yearLabel}
       </p>
       <H className="display mt-3 text-3xl text-parchment transition-colors duration-700 group-hover:text-gold-soft">
         <Link href={`/books/${book.slug}`} className="after:absolute after:inset-0 after:content-['']">
