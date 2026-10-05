@@ -6,6 +6,17 @@ Proclivity Club is an illustrated celestial atlas of literature. Every book is d
 
 ---
 
+## How Maha adds a book
+
+1. **Fill in the form.** Make a copy of the template in [`ADD-A-BOOK.md`](./ADD-A-BOOK.md) and answer the questions: title, author, year, themes, places, feelings, a short description, your reflection, what remained, and how you'd like the book's world to look.
+2. **Hand it over.** Paste the filled-in form into a Claude Code session on this repository with *"Add this book to Proclivity Club."* Or, if you prefer, copy the answers into `content/books.ts` yourself; `ADD-A-BOOK.md` shows which answer goes in which field.
+3. **Check the preview.** Every change pushed to GitHub gets its own Vercel preview link. Open it and find the new book in the Library, on the Atlas, and on its author's page.
+4. **Publish.** When you're happy, merge the change into `main`. The live site updates by itself.
+
+Nothing else needs touching: the book's page, Library card, Atlas stars, constellations, author and place pages, related books and illustration are all created from that one entry.
+
+---
+
 ## Running the site on your computer
 
 You need [Node.js](https://nodejs.org) (version 20 or newer). Then, in a terminal, inside this folder:
@@ -152,4 +163,8 @@ app/globals.css ← design tokens: colours, type, stroke weights, motion
 
 ### Publishing
 
-The site is fully static, and works on [Vercel](https://vercel.com) without any configuration: import the repository and deploy. When you have a real domain, update `url` in `content/site.ts`.
+The site is fully static and works on [Vercel](https://vercel.com) without configuration:
+
+1. In Vercel, choose **Add New → Project**, import `hairbows2001-ops/proclivity-club`, and accept the detected Next.js settings.
+2. Every branch and pull request then gets its own preview deployment; `main` becomes production.
+3. Leave the domain unset until you're ready. Previews use their Vercel address automatically. When you have a domain, add it in Vercel and set the environment variable `NEXT_PUBLIC_SITE_URL` (for example `https://proclivity.club`) so the sitemap and link previews use it.

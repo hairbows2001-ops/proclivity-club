@@ -31,7 +31,7 @@ export default async function ConstellationPage({ params }: { params: Promise<{ 
         <p className="label text-gold">
           <Link href="/constellations" className="hover:text-gold-soft">Constellation</Link>
         </p>
-        <h1 className="display mt-5 text-6xl text-parchment sm:text-8xl">{c.theme.name}</h1>
+        <h1 className="display mt-5 text-5xl text-parchment min-[420px]:text-6xl sm:text-8xl">{c.theme.name}</h1>
         {c.theme.latin && <p className="mt-2 text-xl text-mist italic">{c.theme.latin}</p>}
         <p className="mx-auto mt-8 max-w-2xl text-xl">{c.theme.description}</p>
         <div className="mt-14">

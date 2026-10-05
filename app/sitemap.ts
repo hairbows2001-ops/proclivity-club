@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { siteUrl } from "@/lib/url";
 import { authors, books, journal, litThemes, places } from "@/lib/catalogue";
 
 export const dynamic = "force-static";
@@ -13,5 +13,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...places.map((p) => `/places/${p.slug}`),
     ...journal.map((e) => `/journal/${e.slug}`),
   ];
-  return paths.map((p) => ({ url: site.url + p }));
+  return paths.map((p) => ({ url: siteUrl + p }));
 }

@@ -7,13 +7,14 @@ import "@fontsource-variable/eb-garamond/wght.css";
 import "@fontsource-variable/eb-garamond/wght-italic.css";
 import "./globals.css";
 import { site } from "@/content/site";
+import { siteUrl } from "@/lib/url";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { NightSky } from "@/components/celestial/NightSky";
 import { MotionProvider } from "@/components/ui/MotionProvider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
+  metadataBase: new URL(siteUrl),
   title: { default: `${site.name} — ${site.tagline}`, template: `%s · ${site.name}` },
   description: site.description,
   openGraph: { title: site.name, description: site.description, type: "website" },

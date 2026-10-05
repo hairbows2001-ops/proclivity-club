@@ -10,7 +10,7 @@ export const site = {
   name: "Proclivity Club",
   tagline: "An atlas of books, places and ideas.",
   motto: "Books are places you enter.",
-  /** Used by search engines and link previews. Change to your real address when you launch. */
+  /** Placeholder address. On Vercel the real address is used automatically; set NEXT_PUBLIC_SITE_URL there once you have a domain. */
   url: "https://proclivity.club",
   description:
     "Proclivity Club is an illustrated celestial atlas of literature, where books, themes, authors and places are connected like constellations.",
