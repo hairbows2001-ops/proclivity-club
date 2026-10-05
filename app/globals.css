@@ -170,6 +170,14 @@ a {
 .etching .s2 { stroke-width: calc(var(--hair) * 1.6); }
 .etching .sf { stroke: var(--ink-faint); stroke-width: calc(var(--hair) * 0.7); opacity: 0.8; }
 .etching .occlude { fill: var(--bg); }
+
+/* Depth — aerial perspective in line. Far lines recede into faded blue,
+   near lines come forward a little brighter and firmer. */
+.etching .depth-far { opacity: 0.62; }
+.etching .depth-far :is(.s0, .s1, .s2) { stroke: color-mix(in srgb, var(--ink) 62%, var(--ink-faint)); }
+.etching .depth-mid :is(.s0, .s1, .s2) { stroke: color-mix(in srgb, var(--ink) 88%, var(--ink-faint)); }
+.etching .depth-near :is(.s1, .s2) { stroke: color-mix(in srgb, var(--ink) 78%, var(--ink-soft)); }
+.etching .depth-near .s1 { stroke-width: calc(var(--hair) * 1.12); }
 .etching .fill-ink { fill: var(--ink); stroke: none; }
 .etching .fill-soft { fill: var(--ink-soft); stroke: none; }
 .etching .fill-faint { fill: var(--ink-faint); stroke: none; }

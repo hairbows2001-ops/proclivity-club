@@ -22,6 +22,7 @@ import { line, ridge, rolling, seg, smooth, underside, yAt, type Pt } from "@/co
 
 const W = 1600, H = 900;
 const SEA = 612;
+const SWITCHBACK: Pt[] = [[702, 790], [668, 772], [716, 750], [674, 728], [712, 706], [686, 686], [704, 664]];
 
 export function heroLandscape(): ReactNode[] {
   const rng = createRng("homepage-panorama-ii");
@@ -43,9 +44,11 @@ export function heroLandscape(): ReactNode[] {
       <AirLines rng={rng} y0={300} y1={560} n={7} x0={0} x1={W} />
       <OrbitMark x={1330} y={150} r={10} />
       <OrbitMark x={420} y={110} r={6} ticks={16} />
-      <MountainRange rng={rng} x0={980} x1={W + 20} base={SEA + 40} amp={230} faint bottom={SEA + 60} />
-      <Ink c="sf occlude" d={underside(farHills, SEA + 30)} />
-      <DistantSkyline rng={rng} x0={900} x1={1340} y={SEA + 60} h={56} />
+      <g className="depth-far">
+        <MountainRange rng={rng} x0={980} x1={W + 20} base={SEA + 40} amp={230} faint bottom={SEA + 60} />
+        <Ink c="sf occlude" d={underside(farHills, SEA + 30)} />
+        <DistantSkyline rng={rng} x0={900} x1={1340} y={SEA + 60} h={56} />
+      </g>
       <Ink c="sf" d={`M-10 ${SEA}H${W + 10}`} />
       <Water rng={rng} x0={-10} x1={980} y0={SEA} y1={H} glints={[{ x: 200, w: 30 }]} />
       <Reflection x={200} y0={SEA + 70} y1={H - 10} w={22} rng={rng} />
@@ -56,7 +59,7 @@ export function heroLandscape(): ReactNode[] {
 
   /* ── II · the town: hill town, temple, quay, terraces ── */
   const town = (
-    <g key="town">
+    <g key="town" className="depth-mid">
       <path className="occlude" d={line(acro) + `L960 ${H + 30}L440 ${H + 30}Z`} />
       <Ink c="s1" d={smooth(acro)} />
       <Temple x={704} y={656} s={0.62} ruined />
@@ -66,8 +69,14 @@ export function heroLandscape(): ReactNode[] {
       ))}
       <HillTown rng={rng} x0={462} x1={666} yOf={(x) => Math.min(acroY(x) + 104, 786)} rows={8} s={0.9} smoke />
       <HillTown rng={rng} x0={742} x1={936} yOf={(x) => Math.min(acroY(x) + 104, 786)} rows={8} s={0.9} />
-      <HillTown rng={rng} x0={640} x1={770} yOf={() => 790} rows={3} s={0.85} />
-      <Steps x={694} y={742} w={16} n={8} dx={0} dy={8} />
+      <HillTown rng={rng} x0={728} x1={778} yOf={() => 790} rows={3} s={0.85} />
+      {/* a switchback path climbing from the harbour to the temple */}
+      <Ink c="s0" d={line(SWITCHBACK)} />
+      <Ink c="s0" d={line(SWITCHBACK.map(([x, y]) => [x + 5, y + 2]))} />
+      <Ink c="s0" d={SWITCHBACK.slice(0, -1).flatMap(([x, y], i) => {
+        const [nx, ny] = SWITCHBACK[i + 1];
+        return [0.25, 0.5, 0.75].map((t) => seg(x + (nx - x) * t, y + (ny - y) * t, x + (nx - x) * t + 5, y + (ny - y) * t + 2));
+      }).join("")} />
       {[612, 628, 788, 806].map((x) => <Tree key={"hc" + x} kind="cypress" x={x} y={acroY(x) + 18} s={0.55} rng={rng} />)}
       {/* the fields beyond, then the city ground and the clock-tower quarter */}
       <path className="occlude" d={line(fields) + `L${W + 20} ${H + 30}L1180 ${H + 30}Z`} />
@@ -103,7 +112,7 @@ export function heroLandscape(): ReactNode[] {
     lamps.push(<circle key={"lg" + x} cx={x} cy={r1(y - 38)} r="2" className="fill-soft window-lit" style={{ ["--d" as string]: `${(x % 7) + 1}s` }} />);
   }
   const nearThings = (
-    <g key="near">
+    <g key="near" className="depth-near">
       <Boat x={400} y={770} s={1.3} rng={rng} kind="sail" />
       <Boat x={120} y={850} s={1.1} rng={rng} kind="row" />
       <Boat x={560} y={846} s={0.9} rng={rng} kind="row" />

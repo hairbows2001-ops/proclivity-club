@@ -149,12 +149,19 @@ export function Oak({ x, y, s, rng }: LandmarkProps) {
   };
   [-2.6, -1.95, -1.2, -0.55].forEach((a) => branch(x + Math.cos(a) * 6 * s, trunkTop + 6 * s, a + rng.range(-0.1, 0.1), 56 * s, 6 * s, 2));
   // foliage — a domed crown of overlapping scalloped clusters, drawn top to bottom
-  const crownX = x + rng.range(-6, 6) * s, crownY = trunkTop - 62 * s;
-  const clusters = Array.from({ length: 22 }, (_, i) => {
-    const a = (i / 22) * Math.PI * 2 + rng.range(-0.2, 0.2);
-    const d = i < 14 ? rng.range(0.75, 1) : rng.range(0.1, 0.55);
-    return { x: crownX + Math.cos(a) * 112 * s * d, y: crownY + Math.sin(a) * 66 * s * d, r: rng.range(26, 36) * s };
+  // the crown leans and spreads unevenly, heavier on one side, as old oaks do
+  const crownX = x + rng.range(4, 16) * s, crownY = trunkTop - 60 * s;
+  const lean = rng.range(0.2, 0.7);
+  const clusters = Array.from({ length: 24 }, (_, i) => {
+    const a = (i / 24) * Math.PI * 2 + rng.range(-0.35, 0.35);
+    const d = i < 15 ? rng.range(0.7, 1.05) : rng.range(0.1, 0.6);
+    const reach = 1 + 0.28 * Math.cos(a - lean); // longer limbs on the leaning side
+    const lift = Math.sin(a) < 0 ? rng.range(0.85, 1.15) : 1;
+    return { x: crownX + Math.cos(a) * 108 * s * d * reach, y: crownY + Math.sin(a) * 64 * s * d * lift, r: rng.range(22, 38) * s };
   }).filter((c) => c.y < trunkTop + 6 * s);
+  // one limb reaching out low, carrying its own small cluster
+  clusters.push({ x: crownX + 150 * s, y: trunkTop - 4 * s, r: 20 * s });
+  els.push(<Ink key="limb" c="s1" d={`M${r1(x + 8 * s)} ${r1(trunkTop + 4 * s)}Q${r1(x + 80 * s)} ${r1(trunkTop - 18 * s)} ${r1(crownX + 140 * s)} ${r1(trunkTop - 4 * s)}`} />);
   clusters.sort((p, q) => p.y - q.y);
   clusters.forEach((c, i) => els.push(<g key={"leaf" + i}>{scallopCrown(c.x, c.y, c.r, rng, s)}</g>));
   void tips;

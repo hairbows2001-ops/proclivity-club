@@ -14,3 +14,4 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - All derived data (themes, authors, places, related books, Atlas layout) comes from `lib/catalogue.ts`. Pages must read from there, not from `content/` directly.
 - Engraving primitives in `components/bookworld/` consume a shared seeded RNG and must be rendered on the server (client strict-mode double-renders would desynchronise it). Pass server-rendered SVG into client components as children/props, as `HomeHero` does.
 - Every stroked SVG path goes through `<Ink>` (it sets `pathLength=1` for the ink-in animations). Round computed coordinates with `r1()` in client components to avoid hydration mismatches.
+- The visual system (palette, type, BookWorld scenes, Atlas, layouts) is locked as of the final polish pass. Do not redesign or add decorative systems without the owner's explicit request; new books should reuse existing scenes or the automatic composer.

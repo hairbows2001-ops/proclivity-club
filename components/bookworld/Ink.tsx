@@ -12,9 +12,9 @@ export function Ink({ d, c = "s1", ...rest }: { d: string; c?: string } & Omit<S
 }
 
 /** A group of lines that ink in together, after an optional delay (seconds). */
-export function Layer({ delay = 0, children, ...rest }: { delay?: number } & SVGProps<SVGGElement>) {
+export function Layer({ delay = 0, children, style, ...rest }: { delay?: number } & SVGProps<SVGGElement>) {
   return (
-    <g style={{ ["--ld" as string]: `${delay}s` }} {...rest}>
+    <g style={{ ["--ld" as string]: `${delay}s`, ...style }} {...rest}>
       {children}
     </g>
   );

@@ -38,12 +38,16 @@ export interface SceneContext {
 export interface SceneLayer {
   delay: number;
   node: ReactNode;
+  /** Distance from the viewer: far lines are fainter and cooler, near lines brighter and firmer. */
+  depth?: "far" | "mid" | "near";
 }
 
 export interface ComposedScene {
   layers: SceneLayer[];
   /** Centre of the round medallion crop. */
   medallion: { cx: number; cy: number };
+  /** The horizon line, used for the faint engraved band of air above it. */
+  horizon?: number;
   /** Optional orbit swept around the focal point in the medallion. */
   orbit?: { x: number; y: number };
 }
@@ -178,11 +182,12 @@ function lighthouseBay(ctx: SceneContext): ComposedScene {
   return {
     layers: [
       { delay: 0, node: sky },
-      { delay: 0.5, node: distance },
-      { delay: 0.8, node: water },
-      { delay: 1.3, node: middle },
-      { delay: 1.9, node: coast },
+      { delay: 0.5, node: distance, depth: "far" },
+      { delay: 0.8, node: water, depth: "mid" },
+      { delay: 1.3, node: middle, depth: "mid" },
+      { delay: 1.9, node: coast, depth: "near" },
     ],
+    horizon: HZ,
     medallion: { cx: 560, cy: 470 },
   };
 }
@@ -196,7 +201,7 @@ function lighthouseBay(ctx: SceneContext): ComposedScene {
 function oakAndGreatHouse(ctx: SceneContext): ComposedScene {
   const { rng, uid } = ctx;
   const HZ = 470;
-  const downs = [478, 520, 568].map((b, i) => rolling(rng, -20, W + 20, b, [10, 16, 18][i], 24));
+  const downs = [478, 522, 572].map((b, i) => rolling(rng, -20, W + 20, b, [12, 22, 26][i], 24));
   const crest: Pt[] = [[-20, 640], [120, 610], [260, 596], [420, 600], [560, 622], [700, 662], [860, 712], [1000, 760], [1220, 800]];
   const crestY = (x: number) => yAt(crest, x);
 
@@ -211,25 +216,30 @@ function oakAndGreatHouse(ctx: SceneContext): ComposedScene {
     </g>
   );
 
-  // an avenue of small trees leading to the house, receding
+  // irregular copses scattered over the downs, receding — no avenue, no symmetry
+  const copses: [number, number, number][] = [[612, 2, 0.62], [742, 3, 0.48], [826, 1, 0.38], [968, 4, 0.34], [1080, 2, 0.3], [520, 1, 0.5], [1150, 3, 0.26]];
   const avenue: ReactNode[] = [];
-  for (let i = 0; i < 6; i++) {
-    const t = i / 5;
-    const x = 680 + t * 150, y = 640 - t * 108, s = 0.75 - t * 0.48;
-    avenue.push(<Tree key={"a" + i} kind="round" x={x} y={y} s={s} rng={rng} />);
-    avenue.push(<Tree key={"b" + i} kind="round" x={x + 70 - t * 50} y={y + 6 - t * 4} s={s} rng={rng} />);
-  }
+  copses
+    .map(([cx, count, sc]) => ({ cx, count, sc, base: yAt(downs[sc > 0.45 ? 2 : 1], cx) + 8 }))
+    .sort((a, b) => a.base - b.base)
+    .forEach(({ cx, count, sc, base }, k) => {
+      for (let i = 0; i < count; i++) {
+        const x = cx + (i - count / 2) * 22 * sc + rng.range(-6, 6) * sc, sz = sc * rng.range(0.75, 1.15);
+        avenue.push(<Tree key={`c${k}-${i}`} kind="round" x={x} y={base + rng.range(-3, 3)} s={sz} rng={rng} />);
+      }
+    });
 
   const land = (
     <g>
       <MountainRange rng={rng} x0={-20} x1={W + 20} base={HZ + 4} amp={26} faint bottom={HZ + 10} />
       <Hill rng={rng} pts={downs[0]} cls="sf" hedge />
       <Building kind="manor" x={880} y={yAt(downs[0], 880) + 18} s={0.42} rng={rng} smoke lit={0.45} />
-      <Hill rng={rng} pts={downs[1]} furrows={1} hedge />
+      <Hill rng={rng} pts={downs[1]} furrows={2} hedge />
       <Hill rng={rng} pts={downs[2]} furrows={1} hedge />
       {avenue}
-      <Ink c="s0" d={smooth([[700, 660], [760, 600], [820, 556], [858, 534]])} />
-      <Ink c="s0" d={smooth([[760, 668], [810, 608], [856, 560], [884, 536]])} />
+      {/* a lane wandering down from the house, not ruled */}
+      <Ink c="s0" d={smooth([[640, 700], [700, 650], [668, 612], [742, 584], [812, 566], [862, 538]])} />
+      <Ink c="s0" d={smooth([[676, 704], [728, 654], [700, 616], [760, 590], [824, 570], [872, 540]])} />
     </g>
   );
 
@@ -254,10 +264,11 @@ function oakAndGreatHouse(ctx: SceneContext): ComposedScene {
   return {
     layers: [
       { delay: 0, node: sky },
-      { delay: 0.6, node: land },
-      { delay: 1.2, node: hill },
-      { delay: 1.6, node: oak },
+      { delay: 0.6, node: land, depth: "mid" },
+      { delay: 1.2, node: hill, depth: "near" },
+      { delay: 1.6, node: oak, depth: "near" },
     ],
+    horizon: HZ,
     medallion: { cx: 520, cy: 440 },
   };
 }
@@ -347,10 +358,11 @@ function westminster(ctx: SceneContext): ComposedScene {
   return {
     layers: [
       { delay: 0, node: sky },
-      { delay: 0.5, node: city },
-      { delay: 1, node: river },
-      { delay: 1.5, node: <g>{bridge}</g> },
+      { delay: 0.5, node: city, depth: "mid" },
+      { delay: 1, node: river, depth: "mid" },
+      { delay: 1.5, node: <g>{bridge}</g>, depth: "near" },
     ],
+    horizon: BANK,
     medallion: { cx: 680, cy: 420 },
   };
 }
@@ -440,10 +452,11 @@ function winterHouse(ctx: SceneContext): ComposedScene {
   return {
     layers: [
       { delay: 0, node: sky },
-      { delay: 0.6, node: land },
+      { delay: 0.6, node: land, depth: "mid" },
       { delay: 1.2, node: lamp },
-      { delay: 1.4, node: fore },
+      { delay: 1.4, node: fore, depth: "near" },
     ],
+    horizon: HZ,
     medallion: { cx: 570, cy: 450 },
   };
 }
@@ -506,11 +519,12 @@ function lakeCrossing(ctx: SceneContext): ComposedScene {
   return {
     layers: [
       { delay: 0, node: sky },
-      { delay: 0.4, node: mountains },
-      { delay: 0.9, node: village },
-      { delay: 1.2, node: lake },
-      { delay: 1.6, node: fore },
+      { delay: 0.4, node: mountains, depth: "far" },
+      { delay: 0.9, node: village, depth: "mid" },
+      { delay: 1.2, node: lake, depth: "mid" },
+      { delay: 1.6, node: fore, depth: "near" },
     ],
+    horizon: HZ,
     medallion: { cx: 600, cy: 440 },
   };
 }

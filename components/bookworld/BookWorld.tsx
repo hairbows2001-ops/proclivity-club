@@ -11,7 +11,8 @@
  *   <BookWorld book={book} animate />               lines ink themselves in
  */
 
-import { createRng, hash, r1 } from "@/lib/rng";
+import { Fragment } from "react";
+import { createRng, hash, r1, type Rng } from "@/lib/rng";
 import type { Book, BookWorldConfig } from "@/lib/types";
 import { Ink, Layer } from "./Ink";
 import { Building } from "./architecture";
@@ -129,9 +130,17 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
 
         {composed ? (
           composed.layers.map((layer, i) => (
-            <Layer key={i} delay={d(layer.delay)}>
-              {layer.node}
-            </Layer>
+            <Fragment key={i}>
+              <Layer delay={d(layer.delay)} className={layer.depth ? `depth-${layer.depth}` : undefined}>
+                {layer.node}
+              </Layer>
+              {/* after the sky: a faint engraved band of air above the horizon */}
+              {i === 0 && composed.horizon && (
+                <Layer delay={d(0.3)}>
+                  <AirBand rng={createRng(seedBase + ":air")} horizon={composed.horizon} density={density} />
+                </Layer>
+              )}
+            </Fragment>
           ))
         ) : (
           <>
@@ -156,8 +165,12 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
         {/* warm glow rising behind the buildings, as in old night-city prints */}
         {cfg.architecture !== "none" && <ellipse cx={scene.arch.x} cy={scene.arch.y - 30} rx={340} ry={190} fill={`url(#${uid}-glow)`} />}
 
+        <Layer delay={d(0.3)}>
+          <AirBand rng={createRng(seedBase + ":air")} horizon={HZ} density={density} />
+        </Layer>
+
         {/* ── Distant land ── */}
-        <Layer delay={d(0.5)}>{scene.back}</Layer>
+        <Layer delay={d(0.5)} className="depth-far">{scene.back}</Layer>
 
         {/* ── Water ── */}
         {scene.water && (
@@ -167,7 +180,7 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
         )}
 
         {/* ── Middle ground ── */}
-        <Layer delay={d(1)}>{scene.front}</Layer>
+        <Layer delay={d(1)} className="depth-mid">{scene.front}</Layer>
 
         {/* ── Architecture ── */}
         {cfg.architecture !== "none" && (
@@ -177,7 +190,7 @@ export function BookWorld({ book, variant = "plate", animate = false, className 
         )}
 
         {/* ── Near ground ── */}
-        {scene.foreground && <Layer delay={d(1.7)}>{scene.foreground}</Layer>}
+        {scene.foreground && <Layer delay={d(1.7)} className="depth-near">{scene.foreground}</Layer>}
 
         {/* ── Landmark ── */}
         {cfg.landmark !== "none" && (
@@ -229,6 +242,38 @@ function roadEdges(path: Pt[]) {
     right.push([x + w, y]);
   });
   return { left, right };
+}
+
+/* ── Engraved air ──────────────────────────────────────────────────────
+ * Old engravers shaded the sky near the horizon with fine horizontal lines,
+ * closer together as they approach it; a few motes hang higher up.
+ */
+function AirBand({ rng, horizon, density }: { rng: Rng; horizon: number; density: number }) {
+  const lines: string[] = [];
+  for (let k = 0; k < 16; k++) {
+    const t = k / 15;
+    const y = horizon - 150 * Math.pow(1 - t, 1.7) - 2;
+    let x = rng.range(-40, 60);
+    while (x < W) {
+      const len = rng.range(30, 160) * (0.6 + t);
+      if (rng.chance(0.35 + t * 0.45)) lines.push(seg(x, y, Math.min(x + len, W), y));
+      x += len + rng.range(18, 90) * (1.3 - t);
+    }
+  }
+  const motes = Array.from({ length: Math.round(26 * density) }, () => {
+    const x = rng.range(0, W), y = rng.range(40, horizon - 160), r = rng.range(1.2, 2.4);
+    return seg(x - r, y, x + r, y) + seg(x, y - r, x, y + r);
+  });
+  return (
+    <g aria-hidden>
+      <g opacity="0.45">
+        <Ink c="sf" d={lines.join("")} />
+      </g>
+      <g opacity="0.5">
+        <Ink c="s0" d={motes.join("")} />
+      </g>
+    </g>
+  );
 }
 
 /* ── Weather ───────────────────────────────────────────────────────────── */
