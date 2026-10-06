@@ -362,6 +362,7 @@ The wall is the strangest object in the novel because it is the least described.
       symbol: "eye",
       landmarkSide: "left",
       art: {
+        scene: "alpine-enclosure",
         density: "medium",
         focalPoint: "The lodge's single chimney of smoke, the only movement in the valley",
         composition: "A closed valley, mountains on every side; the lodge small in the middle ground, the woman and her dog on the path",
@@ -450,6 +451,7 @@ What remains is how the form becomes the feeling. A love affair conducted across
       symbol: "hourglass",
       landmarkSide: "left",
       art: {
+        scene: "crossing-threads",
         density: "medium-high",
         focalPoint: "A comet crossing a sky full of time",
         composition: "An empty, timeless upland; a lone observatory on one side, the comet's long tail sweeping across the other",
@@ -668,6 +670,7 @@ What remains is Tolstoy's argument that no general, not even Napoleon, truly com
       symbol: "none",
       landmarkSide: "left",
       art: {
+        scene: "winter-plain",
         density: "dense",
         focalPoint: "The great comet of 1812 over a winter landscape",
         composition: "A wide Russian plain; a church on one side, a great country house on the other, the comet across the sky between",
@@ -930,6 +933,7 @@ What remains is the house itself, airless and claustrophobic, and the way the la
       symbol: "none",
       landmarkSide: "right",
       art: {
+        scene: "veld-farmhouse",
         density: "sparse",
         focalPoint: "A small tin-roofed farmhouse alone under the moon",
         composition: "A flat, dry expanse with the house small in the middle distance, drought-stripped trees around it",
@@ -1190,6 +1194,7 @@ What remains is how modern the book is about its own terror: typewriters, blood 
       symbol: "eye",
       landmarkSide: "right",
       art: {
+        scene: "carpathian-pass",
         density: "medium-high",
         focalPoint: "A crenellated castle on a mountain ridge under the full moon",
         composition: "High Carpathian ranges; the castle on a shoulder of the mountain; a pass winding towards it",

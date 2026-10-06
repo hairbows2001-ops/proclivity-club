@@ -82,7 +82,9 @@ export type CelestialSymbol =
  * Hand-composed scenes. Each is a deliberate composition (see
  * components/bookworld/scenes.tsx) built from the shared line-art primitives.
  */
-export type SceneName = "lighthouse-bay" | "oak-and-great-house" | "westminster-morning" | "winter-house" | "lake-crossing";
+export type SceneName =
+  | "lighthouse-bay" | "oak-and-great-house" | "westminster-morning" | "winter-house" | "lake-crossing"
+  | "alpine-enclosure" | "crossing-threads" | "carpathian-pass" | "winter-plain" | "veld-farmhouse";
 
 /**
  * Optional art direction. `scene` chooses a composed scene; `density` sets

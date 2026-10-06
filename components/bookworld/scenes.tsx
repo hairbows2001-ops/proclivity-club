@@ -25,6 +25,8 @@ import { CelestialMark, Luminary, SkyConstellation, Stars, sparkle } from "./sky
 import { Hill, MountainRange, Water } from "./terrain";
 import { AirLines, DistantSkyline, Easel, Flowers, Frost, Jetty, Quay, Reflection, Rocks, TinyStars } from "./extras";
 import { line, rect, ridge, rolling, seg, smooth, underside, yAt, type Pt } from "./geometry";
+import { FadingConstellation, KeyStar, n } from "./scene-kit";
+import { SCENES_II } from "./scenes-ii";
 
 export interface SceneContext {
   rng: Rng;
@@ -53,38 +55,6 @@ export interface ComposedScene {
 }
 
 const W = 1200, H = 780;
-const n = (base: number, ctx: SceneContext) => Math.round(base * ctx.density);
-
-/** A bright four-pointed star with a halo — the "one star" of a composition. */
-function KeyStar({ x, y, r = 9, uid }: { x: number; y: number; r?: number; uid: string }) {
-  return (
-    <g>
-      <circle cx={x} cy={y} r={r * 3.2} fill={`url(#${uid}-halo)`} />
-      <path d={sparkle(x, y, r)} className="fill-soft twinkle" style={{ "--t": "8s", "--o": 1 } as CSSProperties} />
-      <path d={sparkle(x, y, r * 0.55)} className="fill-soft" transform={`rotate(45 ${x} ${y})`} opacity="0.6" />
-    </g>
-  );
-}
-
-/** A constellation whose lines thin away into the dark. */
-function FadingConstellation({ pts, label }: { pts: Pt[]; uid?: string; label?: string }) {
-  return (
-    <g>
-      {pts.slice(1).map(([x, y], i) => {
-        const [px, py] = pts[i];
-        return <path key={i} d={seg(px, py, x, y)} stroke="var(--color-gold)" style={{ strokeWidth: "calc(var(--hair) * 0.6)" }} opacity={r1(0.75 - i * 0.14)} strokeDasharray={i >= pts.length - 3 ? "2 4" : undefined} />;
-      })}
-      {pts.map(([x, y], i) => (
-        <circle key={"s" + i} cx={x} cy={y} r={i === 0 ? 2.4 : 1.6} className="fill-soft" opacity={r1(1 - i * 0.1)} />
-      ))}
-      {label && (
-        <text x={pts[0][0] + 10} y={pts[0][1] - 9} fontSize="12" fontStyle="italic" letterSpacing="1.5" opacity="0.7">
-          {label}
-        </text>
-      )}
-    </g>
-  );
-}
 
 /* ═════════════════════════════════════════════════════════════════════════
  *  TO THE LIGHTHOUSE — "lighthouse-bay"
@@ -535,4 +505,5 @@ export const SCENES: Record<SceneName, (ctx: SceneContext) => ComposedScene> = {
   "westminster-morning": westminster,
   "winter-house": winterHouse,
   "lake-crossing": lakeCrossing,
+  ...SCENES_II,
 };
