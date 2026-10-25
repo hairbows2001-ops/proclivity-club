@@ -276,7 +276,7 @@ a {
   letter-spacing: -0.01em;
   text-transform: uppercase;
   /* Cap the optical size so hairlines stay visible at display sizes. */
-  font-variation-settings: "opsz" 60;
+  font-variation-settings: "opsz" 30;
 }
 
 .intro-sub {
@@ -487,7 +487,7 @@ a {
   font-size: clamp(3rem, 8.4vw, 8rem);
   line-height: 0.95;
   letter-spacing: -0.01em;
-  font-variation-settings: "opsz" 60;
+  font-variation-settings: "opsz" 30;
 }
 
 .case-subtitle {
