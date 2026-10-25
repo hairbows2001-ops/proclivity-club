@@ -10,8 +10,8 @@ export const site = {
     "Maha Fatima — marketing and creative strategy. Brands, campaigns and content systems that connect strategy with strong visual storytelling.",
 
   // Contact methods. Leave a value empty ("") and it is not shown anywhere.
-  email: "", // e.g. "name@example.com"
-  linkedin: "", // full profile URL, e.g. "https://www.linkedin.com/in/…"
+  email: "maha.f.2001@hotmail.com",
+  linkedin: "https://www.linkedin.com/in/maha-fatima-69b863306",
   cv: "", // put the PDF in /public (e.g. /public/maha-fatima-cv.pdf) and set "/maha-fatima-cv.pdf"
 };
 

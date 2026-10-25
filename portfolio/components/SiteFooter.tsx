@@ -12,6 +12,11 @@ export function SiteFooter() {
             <a href={`mailto:${site.email}`}>{site.email}</a>
           </p>
         )}
+        {site.linkedin && (
+          <p>
+            <a href={site.linkedin}>LinkedIn</a>
+          </p>
+        )}
         <ul className="nav-list">
           {nav.map((item) => (
             <li key={item.href}>
