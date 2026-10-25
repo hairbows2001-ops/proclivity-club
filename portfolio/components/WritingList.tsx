@@ -1,7 +1,7 @@
 import { formatDate, type Article } from "@/content/writing";
 
 // Archive of Substack articles. Each entry links out to the article on Substack.
-// `compact` (homepage) shows title, date and topic only.
+// `compact` (homepage) shows title, date and topic only. Missing fields are simply omitted.
 export function WritingList({ articles, compact = false }: { articles: Article[]; compact?: boolean }) {
   return (
     <ol className={`writing-list${compact ? " is-compact" : ""}`}>
@@ -15,13 +15,15 @@ export function WritingList({ articles, compact = false }: { articles: Article[]
                 <span className="visually-hidden"> (opens Substack in a new tab)</span>
               </a>
             </h3>
-            {!compact && <p className="writing-dek">{a.dek}</p>}
+            {!compact && a.description && <p className="writing-dek">{a.description}</p>}
           </div>
           <div className="writing-meta">
-            <p>
-              <time dateTime={a.date}>{formatDate(a.date)}</time>
-            </p>
-            {a.topics && a.topics.length > 0 && <p className="writing-topics">{a.topics.join(" · ")}</p>}
+            {a.date && (
+              <p>
+                <time dateTime={a.date}>{formatDate(a.date)}</time>
+              </p>
+            )}
+            {a.topic && <p className="writing-topics">{a.topic}</p>}
           </div>
           <p className="writing-arrow" aria-hidden="true">
             {compact ? "↗" : "Read article ↗"}

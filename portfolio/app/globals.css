@@ -911,6 +911,15 @@ a {
   border-top: 1px solid var(--ink);
 }
 
+.writing-label {
+  margin-bottom: 12px;
+}
+
+/* Italic accent inside display titles ("Selected writing"). */
+.page-title em {
+  font-size: 1.08em;
+}
+
 .writing-intro {
   max-width: 52ch;
   margin-bottom: clamp(32px, 4vw, 56px);
@@ -1003,11 +1012,15 @@ a {
 
 @media (max-width: 1024px) {
   .writing-main {
-    grid-column: 2 / 9;
+    grid-column: 2 / 8;
   }
 
   .writing-meta {
-    grid-column: 9 / 12;
+    grid-column: 8 / 11;
+  }
+
+  .writing-arrow {
+    grid-column: 11 / -1;
   }
 
   .intro-role {
