@@ -1,17 +1,23 @@
-// Site-wide details. Edit these values to update the header, footer and metadata.
+// Site-wide details. Edit these values to update the header, footer and Contact page.
 
 export const site = {
   name: "Maha Fatima",
-  role: "Marketer & creative strategist",
-  disciplines: ["Brand strategy", "Campaigns", "Content"],
+  role: "Marketing & Creative Strategy",
+  statement:
+    "I build brands, campaigns and content systems that connect strategy with strong visual storytelling.",
   footerLine: "Brand strategy, campaigns and content.",
   description:
-    "Maha Fatima is a marketer and creative strategist building brands, campaigns and content systems that connect strategy with visual storytelling.",
+    "Maha Fatima — marketing and creative strategy. Brands, campaigns and content systems that connect strategy with strong visual storytelling.",
 
-  // Set to an address (e.g. "name@example.com") to show email links across the site.
-  // Left empty on purpose: no contact link is shown until a real address is provided.
-  email: "",
+  // Contact methods. Leave a value empty ("") and it is not shown anywhere.
+  email: "", // e.g. "name@example.com"
+  linkedin: "", // full profile URL, e.g. "https://www.linkedin.com/in/…"
+  cv: "", // put the PDF in /public (e.g. /public/maha-fatima-cv.pdf) and set "/maha-fatima-cv.pdf"
 };
 
-// Main navigation. Only list pages that exist.
-export const nav = [{ label: "Work", href: "/#work" }];
+// Main navigation.
+export const nav = [
+  { label: "Work", href: "/#work" },
+  { label: "About", href: "/about/" },
+  { label: "Contact", href: "/contact/" },
+];

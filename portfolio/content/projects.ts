@@ -1,16 +1,16 @@
-// Selected work shown on the homepage, in order.
-// `href` is the case-study page. Leave it out until that page exists and the
-// project is shown without a link.
+// Selected work, in order. Used by the homepage list and the case-study pages.
+// All three are self-initiated concept projects; the site says so on every entry.
 
-export type Img = { src: string; alt: string; width: number; height: number };
+import { images, type Img } from "./images";
 
 export type Project = {
   slug: string;
   title: string;
   summary: string;
-  discipline: string;
-  tags: string[];
-  href?: string;
+  disciplines: string[];
+  // TODO(owner): HEWN's year comes from the portfolio ("Estd 2026"); confirm Compass and Gallery 188.
+  year: string;
+  href: string;
   cover: Img[];
 };
 
@@ -18,52 +18,32 @@ export const projects: Project[] = [
   {
     slug: "hewn",
     title: "HEWN",
-    summary: "Sculptural fitness objects designed to be seen as much as they are used.",
-    discipline: "Brand identity",
-    tags: ["Wellness", "Brand strategy", "Identity", "Packaging", "Retail"],
-    cover: [
-      {
-        src: "/images/hewn-hero.webp",
-        alt: "HEWN campaign image: dark oak and black ash fitness weights arranged on a stone ledge in warm light.",
-        width: 1365,
-        height: 768,
-      },
-    ],
+    summary: "A wellness brand that turns exercise equipment into sculptural objects for the home.",
+    disciplines: ["Brand Strategy", "Identity Design", "Packaging", "Wellness"],
+    year: "2026",
+    href: "/work/hewn/",
+    cover: [images.hewnHero],
   },
   {
     slug: "compass",
     title: "Compass",
     summary: "A calmer caregiving app for young adults supporting their ageing parents.",
-    discipline: "Brand identity · Digital product",
-    tags: ["Health tech", "Brand strategy", "Identity", "UX/UI"],
-    cover: [
-      {
-        src: "/images/compass-hero.webp",
-        alt: "Compass logo, a soft four-point star inside a glowing circle, with the line “Guiding your health. Every day.” on deep green.",
-        width: 1365,
-        height: 768,
-      },
-    ],
+    disciplines: ["Brand Strategy", "Identity Design", "Digital Product", "Health Tech"],
+    year: "2026",
+    href: "/work/compass/",
+    cover: [images.compassHero],
   },
   {
     slug: "gallery-188",
     title: "Gallery 188",
     summary: "A social and content strategy that makes contemporary art feel less intimidating.",
-    discipline: "Social & content strategy",
-    tags: ["Arts & culture", "Content systems", "Short-form video", "Campaign"],
-    cover: [
-      {
-        src: "/images/g188-hall.webp",
-        alt: "A bright gallery hall with a glass roof, concrete columns and a single large painting on the far wall.",
-        width: 737,
-        height: 700,
-      },
-      {
-        src: "/images/g188-viewer.webp",
-        alt: "A visitor standing in front of a large abstract painting in black and cream.",
-        width: 519,
-        height: 768,
-      },
-    ],
+    disciplines: ["Social Strategy", "Content Systems", "Short-Form Video", "Arts & Culture"],
+    year: "2026",
+    href: "/work/gallery-188/",
+    cover: [images.g188Hall, images.g188Viewer],
   },
 ];
+
+export function projectIndex(slug: string) {
+  return projects.findIndex((p) => p.slug === slug);
+}

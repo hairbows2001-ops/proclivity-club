@@ -1,15 +1,12 @@
-// Biography, experience and expertise. Used on the homepage and the About page.
+// Biography, experience, education and expertise for the About page.
+// The homepage shows only the first paragraph of `bio`.
 
-export const portrait = {
-  src: "/images/portrait.webp",
-  alt: "Close-up portrait of Maha Fatima resting her face on her hand, wearing a gold and pearl earring.",
-  width: 360,
-  height: 442,
-};
+export const lede = "I am a marketer and creative strategist.";
 
 export const bio = [
   "I build brands, campaigns and content systems that connect strategy with strong visual storytelling. My work sits at the intersection of brand strategy, social media, cultural insight and creative direction.",
   "I’m interested in what makes people pay attention — and how consumer behaviour, culture and creativity can be translated into campaigns that feel relevant, intentional and memorable.",
+  "I help businesses create a brand or identity that is clear, strong and reflective of what they are.",
 ];
 
 export const experience = [
@@ -19,7 +16,7 @@ export const experience = [
 ];
 
 export const education = [
-  { role: "BA, Liberal Studies", org: "University of Waterloo — Psychology + Sociology", years: "2019–2024" },
+  { role: "BA, Liberal Studies", org: "University of Waterloo · Psychology + Sociology", years: "2019–2024" },
 ];
 
 export const expertise = [

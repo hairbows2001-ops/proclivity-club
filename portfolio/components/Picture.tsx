@@ -1,4 +1,4 @@
-import type { Img } from "@/content/projects";
+import type { Img } from "@/content/images";
 
 // Plain <img> with intrinsic size to prevent layout shift. Images are
 // pre-sized WebP files in /public/images, so no runtime optimisation is needed.

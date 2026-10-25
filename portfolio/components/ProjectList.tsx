@@ -1,42 +1,37 @@
 import Link from "next/link";
 import type { Project } from "@/content/projects";
-import { Picture } from "./Picture";
+import { ImageRow } from "./ImageRow";
 
 export function ProjectList({ projects }: { projects: Project[] }) {
   return (
-    <ol className="project-list">
+    <ol className="archive">
       {projects.map((p, i) => (
-        <li key={p.slug}>
-          <article className={`project${p.href ? " is-linked" : ""}`}>
-            <div className="project-meta">
-              <span className="project-num">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="project-title">
-                {p.href ? <Link href={p.href}>{p.title}</Link> : p.title}
-              </h3>
-              <p className="project-discipline">{p.discipline}</p>
-              <p className="project-type">Concept project</p>
-            </div>
-            <div className={`project-media count-${p.cover.length}`}>
-              {p.cover.map((img, j) => (
-                <figure key={img.src}>
-                  <Picture img={img} eager={i === 0 && j === 0} />
-                </figure>
+        <li key={p.slug} className="entry">
+          <div className="entry-meta">
+            <p className="entry-num">{String(i + 1).padStart(2, "0")}</p>
+            <h3 className="entry-title">
+              <Link href={p.href}>{p.title}</Link>
+            </h3>
+            <ul className="entry-disciplines">
+              {p.disciplines.map((d) => (
+                <li key={d}>{d}</li>
               ))}
-            </div>
-            <div className="project-body">
-              <p className="project-summary">{p.summary}</p>
-              <ul className="tags" aria-label="Disciplines">
-                {p.tags.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ul>
-              {p.href && (
-                <p className="project-cta" aria-hidden="true">
-                  View case study →
-                </p>
-              )}
-            </div>
-          </article>
+            </ul>
+            <p className="entry-year">{p.year}</p>
+            <p className="entry-note">Concept project</p>
+          </div>
+          <div className="entry-body">
+            {/* Duplicate of the title link for mouse and touch; kept out of the tab order. */}
+            <Link href={p.href} tabIndex={-1} aria-hidden="true" className="entry-image-link">
+              <ImageRow images={p.cover} eager={i === 0} stackOnMobile={false} />
+            </Link>
+            <p className="entry-summary">{p.summary}</p>
+            <p className="entry-more">
+              <Link href={p.href} tabIndex={-1} aria-hidden="true">
+                View project →
+              </Link>
+            </p>
+          </div>
         </li>
       ))}
     </ol>
