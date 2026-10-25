@@ -200,6 +200,14 @@ a {
   padding-block: 22px;
 }
 
+/* Narrow phones: nav sits on its own row under the name rather than wrapping by chance. */
+@media (max-width: 440px) {
+  .site-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
 .wordmark {
   font-size: 0.8125rem;
   font-weight: 600;
@@ -982,6 +990,12 @@ a {
 .writing-meta {
   grid-column: 10 / 12;
   font-size: 0.8125rem;
+}
+
+.writing-publication {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .writing-topics,

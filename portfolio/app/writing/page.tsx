@@ -18,7 +18,7 @@ export default function WritingPage() {
       <section className="writing wrap" aria-label="Articles">
         <p className="small-label writing-label">MISSOSOUP · Culture / Marketing</p>
         <p className="writing-intro">Essays published on Substack. Each title opens the full article.</p>
-        <WritingList articles={sortedArticles} />
+        <WritingList articles={sortedArticles} level={2} />
       </section>
     </>
   );

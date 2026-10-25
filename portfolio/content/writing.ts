@@ -1,5 +1,6 @@
-// MISSOSOUP essays on Substack, shown on /writing (all) and on the homepage (latest four).
-// Use only details confirmed from the live Substack page; leave a field out if it isn't there.
+// MISSOSOUP essays on Substack, shown on /writing (all) and on the homepage (first four).
+// Dated entries sort newest first; undated ones keep the order listed here.
+// Only add a date, description or topic that the article itself gives; otherwise leave it out.
 // The Writing nav link, page and homepage section appear once `articles` has entries.
 //
 // {
@@ -20,19 +21,38 @@ export type Article = {
   publication?: "MISSOSOUP";
 };
 
-export const articles: Article[] = [];
-
-// Links supplied by Maha that could not be opened from the build environment
-// (Substack is blocked by its network policy), so nothing about them is confirmed.
-// Not rendered anywhere. Move each into `articles` once its details are verified.
-// URL format only: "p-" note links usually point to a post, "c-" to a note or comment.
-export const unresolved = [
-  "https://substack.com/@missossoup/note/p-222087617",
-  "https://substack.com/@missossoup/note/p-221790471",
-  "https://substack.com/@missossoup/note/c-361898914",
-  "https://substack.com/@missossoup/note/c-356728477",
-  "https://substack.com/@missossoup/note/p-218501158",
-  "https://substack.com/@missossoup/note/p-218343534",
+// Titles and links as supplied by Maha. No dates, subtitles or topics were supplied, so none are set.
+export const articles: Article[] = [
+  {
+    title: "Beauty Wants Out of the Makeup Bag",
+    url: "https://substack.com/@missossoup/note/p-222087617",
+    publication: "MISSOSOUP",
+  },
+  {
+    title: "Marketing Is Entering Its Show-Your-Work Era",
+    url: "https://substack.com/@missossoup/note/p-221790471",
+    publication: "MISSOSOUP",
+  },
+  {
+    title: "The Next Luxury Is Having One Less Decision to Make",
+    url: "https://substack.com/@missossoup/note/c-361898914",
+    publication: "MISSOSOUP",
+  },
+  {
+    title: "Why Brands Are Building Entertainment Catalogues",
+    url: "https://substack.com/@missossoup/note/c-356728477",
+    publication: "MISSOSOUP",
+  },
+  {
+    title: "The Next AI Promise Is Knowing Its Place",
+    url: "https://substack.com/@missossoup/note/p-218501158",
+    publication: "MISSOSOUP",
+  },
+  {
+    title: "Social Video Wins Attention but Loses the Brand",
+    url: "https://substack.com/@missossoup/note/p-218343534",
+    publication: "MISSOSOUP",
+  },
 ];
 
 // Newest first; undated entries keep their listed order after dated ones.
