@@ -34,10 +34,12 @@ export function CaseIntro({
               <dd>{m.value}</dd>
             </div>
           ))}
-          <div>
-            <dt>Year</dt>
-            <dd>{project.year}</dd>
-          </div>
+          {project.year && (
+            <div>
+              <dt>Year</dt>
+              <dd>{project.year}</dd>
+            </div>
+          )}
           <div>
             <dt>Type</dt>
             <dd>Concept project</dd>

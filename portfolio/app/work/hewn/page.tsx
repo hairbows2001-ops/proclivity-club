@@ -37,8 +37,8 @@ export default function HewnPage() {
 
       <CaseSection label="Strategy" title="Designed to be seen. Made to be used.">
         <p>
-          Most exercise equipment is made to be put away. HEWN positions it as something to live with: objects
-          in oak, ash and stone that earn a place in the room, then get picked up and used.
+          HEWN treats exercise equipment as something to live with rather than store away: objects in oak, ash
+          and stone that stay out in the room and get picked up and used.
         </p>
         <dl className="pairs">
           <div>

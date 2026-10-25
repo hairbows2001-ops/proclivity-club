@@ -8,8 +8,8 @@ export type Project = {
   title: string;
   summary: string;
   disciplines: string[];
-  // TODO(owner): HEWN's year comes from the portfolio ("Estd 2026"); confirm Compass and Gallery 188.
-  year: string;
+  // Only set a year the portfolio states. HEWN: "Estd 2026". Others: none stated, so omitted.
+  year?: string;
   href: string;
   cover: Img[];
 };
@@ -29,7 +29,6 @@ export const projects: Project[] = [
     title: "Compass",
     summary: "A calmer caregiving app for young adults supporting their ageing parents.",
     disciplines: ["Brand Strategy", "Identity Design", "Digital Product", "Health Tech"],
-    year: "2026",
     href: "/work/compass/",
     cover: [images.compassHero],
   },
@@ -38,7 +37,6 @@ export const projects: Project[] = [
     title: "Gallery 188",
     summary: "A social and content strategy that makes contemporary art feel less intimidating.",
     disciplines: ["Social Strategy", "Content Systems", "Short-Form Video", "Arts & Culture"],
-    year: "2026",
     href: "/work/gallery-188/",
     cover: [images.g188Hall, images.g188Viewer],
   },

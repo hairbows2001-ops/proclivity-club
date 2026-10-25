@@ -17,7 +17,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
                 <li key={d}>{d}</li>
               ))}
             </ul>
-            <p className="entry-year">{p.year}</p>
+            {p.year && <p className="entry-year">{p.year}</p>}
             <p className="entry-note">Concept project</p>
           </div>
           <div className="entry-body">
