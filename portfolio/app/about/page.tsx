@@ -31,7 +31,7 @@ export default function AboutPage() {
 
       <section className="about wrap" aria-label="Biography">
         <figure className="about-portrait">
-          <Picture img={images.portrait} eager />
+          <Picture img={images.portrait} />
         </figure>
         <div className="about-bio">
           <p className="lede">{lede}</p>

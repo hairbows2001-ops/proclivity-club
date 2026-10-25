@@ -5,12 +5,16 @@
    ------------------------------------------------------------------ */
 
 :root {
-  --bg: #f4f2ee;
-  --ink: #161514;
-  --muted: #64615c;
-  --rule: #d6d2ca;
+  /* Monochrome interface. Grey is for secondary metadata only (5.3:1 on white). */
+  --bg: #ffffff;
+  --ink: #000000;
+  --muted: #6b6b6b;
+  --rule: #d4d4d4;
+  --img-bg: #f2f2f2;
 
-  --serif: "Instrument Serif", "Times New Roman", serif;
+  /* Display serif, editorial italic accent, utility sans. Fallbacks keep text readable without web fonts. */
+  --serif: "Bodoni Moda Variable", "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
+  --italic: "Cormorant Garamond", Cormorant, Garamond, "Times New Roman", serif;
   --sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --gutter: clamp(20px, 3.4vw, 48px);
@@ -70,7 +74,15 @@ img {
   display: block;
   max-width: 100%;
   height: auto;
-  background: #e7e3dc;
+  background: var(--img-bg);
+}
+
+/* Editorial italic accent: used for <em> and a few named elements only. */
+em,
+.accent {
+  font-family: var(--italic);
+  font-style: italic;
+  font-weight: 400;
 }
 
 a {
@@ -137,8 +149,9 @@ a {
 
 .lede {
   font-family: var(--serif);
-  font-size: clamp(1.75rem, 2.6vw, 2.4rem);
-  line-height: 1.1;
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 .small-label,
@@ -220,8 +233,9 @@ a {
 
 .footer-line {
   font-family: var(--serif);
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.05;
+  font-size: clamp(1.6rem, 3.2vw, 2.9rem);
+  line-height: 1.1;
+  text-wrap: balance;
   margin-bottom: 40px;
 }
 
@@ -245,11 +259,24 @@ a {
   padding-block: clamp(48px, 7vw, 112px) clamp(56px, 7vw, 104px);
 }
 
+.intro-kicker {
+  margin-bottom: clamp(16px, 2vw, 28px);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Sized so "MAHA FATIMA" holds one line on desktop and tablet; it stacks on phones. */
 .intro-name {
   font-family: var(--serif);
-  font-size: clamp(3.4rem, 10vw, 9rem);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-size: clamp(3rem, 12.3vw, 11.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  /* Cap the optical size so hairlines stay visible at display sizes. */
+  font-variation-settings: "opsz" 60;
 }
 
 .intro-sub {
@@ -269,9 +296,10 @@ a {
 .intro-statement {
   grid-column: 4 / 11;
   font-family: var(--serif);
-  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
-  line-height: 1.15;
-  max-width: 30ch;
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+  line-height: 1.25;
+  max-width: 34ch;
+  text-wrap: pretty;
 }
 
 /* ---------- Home: section heads & archive ---------- */
@@ -285,9 +313,14 @@ a {
   font-size: 0.875rem;
 }
 
+/* Section names are the one recurring italic accent ("selected work", "about me"). */
 .section-head h2 {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-family: var(--italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2rem, 3.2vw, 3rem);
+  line-height: 1;
+  text-transform: lowercase;
 }
 
 .section-head p {
@@ -320,8 +353,9 @@ a {
 .entry-title {
   margin: 6px 0 18px;
   font-family: var(--serif);
-  font-size: clamp(2.2rem, 3.4vw, 3.25rem);
-  line-height: 1;
+  font-size: clamp(1.9rem, 2.6vw, 2.6rem);
+  line-height: 1.02;
+  text-wrap: balance;
 }
 
 .entry-title a {
@@ -446,18 +480,21 @@ a {
   grid-column: 1 / -1;
 }
 
-.case-title {
+.case-title,
+.page-title {
   font-family: var(--serif);
-  font-size: clamp(3.4rem, 10vw, 9rem);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-size: clamp(3rem, 8.4vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 60;
 }
 
 .case-subtitle {
-  margin-top: 14px;
-  font-family: var(--serif);
+  margin-top: 16px;
+  font-family: var(--italic);
   font-style: italic;
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
+  font-size: clamp(1.6rem, 2.4vw, 2.3rem);
   line-height: 1.15;
 }
 
@@ -524,9 +561,10 @@ a {
 
 .case-heading {
   font-family: var(--serif);
-  font-size: clamp(1.9rem, 3.2vw, 3rem);
-  line-height: 1.05;
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  line-height: 1.1;
   max-width: 26ch;
+  text-wrap: balance;
 }
 
 .case-section-body > .case-heading + * {
@@ -563,7 +601,7 @@ a {
   display: inline-block;
   margin-top: 12px;
   font-family: var(--serif);
-  font-size: clamp(2.6rem, 6vw, 5.5rem);
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
   line-height: 1;
   text-decoration: none;
 }
@@ -609,16 +647,16 @@ a {
 
 .pairs dd {
   font-family: var(--serif);
-  font-size: 1.35rem;
-  line-height: 1.2;
+  font-size: 1.2rem;
+  line-height: 1.3;
 }
 
 /* Gallery 188 */
 
 .pull {
-  font-family: var(--serif);
+  font-family: var(--italic);
   font-style: italic;
-  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-size: clamp(1.7rem, 2.6vw, 2.4rem);
   line-height: 1.15;
   max-width: 30ch;
 }
@@ -669,8 +707,8 @@ a {
 
 .col-title {
   font-family: var(--serif);
-  font-size: clamp(1.7rem, 2.2vw, 2.1rem);
-  line-height: 1.05;
+  font-size: clamp(1.45rem, 1.9vw, 1.8rem);
+  line-height: 1.1;
 }
 
 .needs {
@@ -679,11 +717,13 @@ a {
 
 .voice-lines {
   font-family: var(--serif);
-  font-size: clamp(1.35rem, 2vw, 1.8rem);
-  line-height: 1.3;
+  font-size: clamp(1.2rem, 1.7vw, 1.55rem);
+  line-height: 1.4;
 }
 
 .voice-lines li:nth-child(even) {
+  font-family: var(--italic);
+  font-size: 1.12em;
   font-style: italic;
 }
 
@@ -740,8 +780,8 @@ a {
 
 .campaign-lines {
   font-family: var(--serif);
-  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
-  line-height: 1.12;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -774,13 +814,6 @@ a {
 
 .page-intro {
   padding-block: clamp(40px, 6vw, 96px) clamp(32px, 4vw, 56px);
-}
-
-.page-title {
-  font-family: var(--serif);
-  font-size: clamp(3.4rem, 10vw, 9rem);
-  line-height: 0.9;
-  letter-spacing: -0.02em;
 }
 
 .about {
@@ -867,13 +900,116 @@ a {
 
 .contact-methods dd {
   font-family: var(--serif);
-  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
   overflow-wrap: anywhere;
+}
+
+/* ---------- Writing ---------- */
+
+.writing {
+  padding-top: 20px;
+  border-top: 1px solid var(--ink);
+}
+
+.writing-intro {
+  max-width: 52ch;
+  margin-bottom: clamp(32px, 4vw, 56px);
+  font-size: 1.0625rem;
+}
+
+.selected-writing {
+  margin-bottom: clamp(48px, 6vw, 96px);
+}
+
+.writing-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 8px;
+  align-items: baseline;
+  padding-block: 22px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.writing-entry .entry-num {
+  grid-column: 1 / 2;
+  font-size: 0.8125rem;
+}
+
+.writing-main {
+  grid-column: 4 / 10;
+}
+
+.writing-title {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 2.1vw, 2rem);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.writing-title a {
+  text-decoration: none;
+}
+
+/* The title link covers the whole row. */
+.writing-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.writing-entry:hover .writing-title a,
+.writing-title a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.writing-dek {
+  margin-top: 8px;
+  max-width: 56ch;
+}
+
+.writing-meta {
+  grid-column: 10 / 12;
+  font-size: 0.8125rem;
+}
+
+.writing-topics,
+.writing-arrow {
+  color: var(--muted);
+}
+
+.writing-arrow {
+  grid-column: 12 / -1;
+  justify-self: end;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.is-compact .writing-entry {
+  padding-block: 16px;
+}
+
+.is-compact .writing-title {
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+}
+
+.view-all {
+  margin-top: 24px;
 }
 
 /* ---------- Tablet ---------- */
 
 @media (max-width: 1024px) {
+  .writing-main {
+    grid-column: 2 / 9;
+  }
+
+  .writing-meta {
+    grid-column: 9 / 12;
+  }
+
   .intro-role {
     grid-column: 1 / -1;
   }
@@ -989,6 +1125,35 @@ a {
 /* ---------- Mobile ---------- */
 
 @media (max-width: 680px) {
+  /* Name stacks to two lines and grows, rather than shrinking to fit one. */
+  .intro-name span {
+    display: block;
+  }
+
+  .intro-name {
+    font-size: min(19vw, 6rem);
+  }
+
+  .writing-entry {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    column-gap: 12px;
+  }
+
+  .writing-main {
+    grid-column: 2 / -1;
+  }
+
+  .writing-meta {
+    grid-column: 2 / 3;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 10px;
+  }
+
+  .writing-arrow {
+    grid-column: 3 / -1;
+  }
+
   :root {
     --img-gap: 8px;
   }

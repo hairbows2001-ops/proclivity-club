@@ -1,10 +1,14 @@
+import { articles } from "./writing";
+
 // Site-wide details. Edit these values to update the header, footer and Contact page.
 
 export const site = {
   name: "Maha Fatima",
-  role: "Marketing & Creative Strategy",
+  role: "Marketing · Creative Strategy",
   statement:
     "I build brands, campaigns and content systems that connect strategy with strong visual storytelling.",
+  // The phrase in the statement set in the italic accent face.
+  statementAccent: "visual storytelling",
   footerLine: "Brand strategy, campaigns and content.",
   description:
     "Maha Fatima — marketing and creative strategy. Brands, campaigns and content systems that connect strategy with strong visual storytelling.",
@@ -16,8 +20,10 @@ export const site = {
 };
 
 // Main navigation.
+// Writing appears once content/writing.ts has articles.
 export const nav = [
   { label: "Work", href: "/#work" },
+  ...(articles.length > 0 ? [{ label: "Writing", href: "/writing/" }] : []),
   { label: "About", href: "/about/" },
   { label: "Contact", href: "/contact/" },
 ];

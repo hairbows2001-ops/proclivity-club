@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/instrument-serif/400.css";
-import "@fontsource/instrument-serif/400-italic.css";
+import "@fontsource-variable/bodoni-moda/opsz.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
 import "@fontsource-variable/inter/wght.css";
 import "./globals.css";
 import { site } from "@/content/site";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f2ee",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
