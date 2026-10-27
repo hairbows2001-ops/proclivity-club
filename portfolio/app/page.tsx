@@ -2,7 +2,7 @@ import Link from "next/link";
 import { site } from "@/content/site";
 import { projects } from "@/content/projects";
 import { images } from "@/content/images";
-import { previewParagraph } from "@/content/about";
+import { preview } from "@/content/about";
 import { sortedArticles } from "@/content/writing";
 import { ProjectList } from "@/components/ProjectList";
 import { WritingList } from "@/components/WritingList";
@@ -68,7 +68,7 @@ export default function Home() {
             <Picture img={images.portrait} />
           </figure>
           <div className="about-preview-text">
-            <p>{previewParagraph()}</p>
+            <p>{preview}</p>
             <p>
               <Link href="/about/" className="arrow-link">
                 About Maha <span aria-hidden="true">→</span>
