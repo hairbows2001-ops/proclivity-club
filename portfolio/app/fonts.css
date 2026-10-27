@@ -75,3 +75,14 @@
   descent-override: 22.5%;
   line-gap-override: 0%;
 }
+
+/* Capitals run narrower relative to Times than lowercase does, so the all-caps name gets
+   its own scale; with the text fallback above it would wrap to two lines until Bodoni loads. */
+@font-face {
+  font-family: "Bodoni Caps Fallback";
+  src: local("Times New Roman"), local("TimesNewRomanPSMT"), local("Liberation Serif"), local("Times");
+  size-adjust: 102.1%;
+  ascent-override: 110.7%;
+  descent-override: 39.2%;
+  line-gap-override: 0%;
+}

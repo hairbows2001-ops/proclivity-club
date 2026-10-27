@@ -269,7 +269,7 @@ a {
 
 /* Sized so "MAHA FATIMA" holds one line on desktop and tablet; it stacks on phones. */
 .intro-name {
-  font-family: var(--serif);
+  font-family: "Bodoni Moda Variable", "Bodoni Moda", "Bodoni Caps Fallback", var(--serif);
   font-weight: 400;
   font-size: clamp(3rem, 12.3vw, 11.5rem);
   line-height: 0.92;
