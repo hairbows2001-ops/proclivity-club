@@ -4,11 +4,12 @@ import { articles } from "./writing";
 
 export const site = {
   name: "Maha Fatima",
-  role: "Marketing · Creative Strategy",
-  statement:
-    "I build brands, campaigns and content systems that connect strategy with strong visual storytelling.",
-  // The phrase in the statement set in the italic accent face.
-  statementAccent: "visual storytelling",
+  role: "Marketing & Creative Strategy",
+  // Homepage introduction, shown above the work.
+  intro:
+    "I’m a marketer and creative strategist working across brand, campaigns, content and culture. I’m interested in why people pay attention — and how that can be translated into work that feels relevant, intentional and memorable.",
+  // The phrase in the introduction set in the italic accent face.
+  introAccent: "why people pay attention",
   footerLine: "Brand strategy, campaigns and content.",
   description:
     "Maha Fatima — marketing and creative strategy. Brands, campaigns and content systems that connect strategy with strong visual storytelling.",

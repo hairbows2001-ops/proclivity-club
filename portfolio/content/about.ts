@@ -9,6 +9,12 @@ export const bio = [
   "I help businesses create a brand or identity that is clear, strong and reflective of what they are.",
 ];
 
+// Homepage About preview: background that continues from the intro without repeating it.
+// Built from the entries below so it stays in step with the About page.
+export function previewParagraph() {
+  return `My work sits at the intersection of brand strategy, social media, cultural insight and creative direction. I studied psychology and sociology at the University of Waterloo, and I’m currently ${experience[0].role} at ${experience[0].org}.`;
+}
+
 export const experience = [
   { role: "Marketing & Communications Lead", org: "Women’s Habitat of Etobicoke", years: "2025–Present" },
   { role: "Marketing & Communications Coordinator", org: "Academy of Learning Career College", years: "2025–2026" },

@@ -2,20 +2,19 @@ import Link from "next/link";
 import { site } from "@/content/site";
 import { projects } from "@/content/projects";
 import { images } from "@/content/images";
-import { bio } from "@/content/about";
+import { previewParagraph } from "@/content/about";
 import { sortedArticles } from "@/content/writing";
 import { ProjectList } from "@/components/ProjectList";
 import { WritingList } from "@/components/WritingList";
 import { Picture } from "@/components/Picture";
 
 export default function Home() {
-  const [before, after] = site.statement.split(site.statementAccent);
+  const [before, after] = site.intro.split(site.introAccent);
   const selectedWriting = sortedArticles.slice(0, 4);
 
   return (
     <>
       <section className="intro wrap" aria-labelledby="intro-title">
-        <p className="intro-kicker">Portfolio</p>
         <h1 id="intro-title" className="intro-name">
           {site.name.split(" ").map((word) => (
             <span key={word}>{word} </span>
@@ -23,11 +22,18 @@ export default function Home() {
         </h1>
         <div className="intro-sub grid-12">
           <p className="intro-role">{site.role}</p>
-          <p className="intro-statement">
-            {before}
-            <em>{site.statementAccent}</em>
-            {after}
-          </p>
+          <div className="intro-body">
+            <p className="intro-statement">
+              {before}
+              <em>{site.introAccent}</em>
+              {after}
+            </p>
+            <p className="intro-more">
+              <a href="#work" className="arrow-link">
+                View selected work <span aria-hidden="true">↓</span>
+              </a>
+            </p>
+          </div>
         </div>
       </section>
 
@@ -62,7 +68,7 @@ export default function Home() {
             <Picture img={images.portrait} />
           </figure>
           <div className="about-preview-text">
-            <p>{bio[0]}</p>
+            <p>{previewParagraph()}</p>
             <p>
               <Link href="/about/" className="arrow-link">
                 About Maha <span aria-hidden="true">→</span>

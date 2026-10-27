@@ -13,9 +13,9 @@
   --img-bg: #f2f2f2;
 
   /* Display serif, editorial italic accent, utility sans. Fallbacks keep text readable without web fonts. */
-  --serif: "Bodoni Moda Variable", "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
+  --serif: "Bodoni Moda Variable", "Bodoni Moda", "Bodoni Fallback", "Bodoni 72", Didot, "Times New Roman", serif;
   --italic: "Cormorant Garamond", Cormorant, Garamond, "Times New Roman", serif;
-  --sans: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Inter Variable", "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --gutter: clamp(20px, 3.4vw, 48px);
   --img-gap: 12px;
@@ -267,14 +267,6 @@ a {
   padding-block: clamp(48px, 7vw, 112px) clamp(56px, 7vw, 104px);
 }
 
-.intro-kicker {
-  margin-bottom: clamp(16px, 2vw, 28px);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
 /* Sized so "MAHA FATIMA" holds one line on desktop and tablet; it stacks on phones. */
 .intro-name {
   font-family: var(--serif);
@@ -301,13 +293,27 @@ a {
   text-transform: uppercase;
 }
 
-.intro-statement {
+.intro-body {
   grid-column: 4 / 11;
+}
+
+/* The introduction: one paragraph, set a step below the old one-line statement so it stays light. */
+.intro-statement {
   font-family: var(--serif);
-  font-size: clamp(1.35rem, 2vw, 1.9rem);
-  line-height: 1.25;
-  max-width: 34ch;
+  font-size: clamp(1.25rem, 1.75vw, 1.65rem);
+  line-height: 1.32;
+  max-width: 40ch;
   text-wrap: pretty;
+}
+
+/* Cormorant's smaller x-height: scale the italic phrase to sit level with the Bodoni. */
+.intro-statement em {
+  font-size: 1.1em;
+}
+
+.intro-more {
+  margin-top: clamp(20px, 2.2vw, 32px);
+  font-size: 0.875rem;
 }
 
 /* ---------- Home: section heads & archive ---------- */
@@ -1041,7 +1047,7 @@ a {
     grid-column: 1 / -1;
   }
 
-  .intro-statement {
+  .intro-body {
     grid-column: 1 / 11;
   }
 
@@ -1185,8 +1191,13 @@ a {
     --img-gap: 8px;
   }
 
-  .intro-statement {
+  .intro-body {
     grid-column: 1 / -1;
+  }
+
+  .intro-statement {
+    font-size: 1.15rem;
+    line-height: 1.4;
   }
 
   .entry-meta {
