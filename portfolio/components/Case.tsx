@@ -93,7 +93,7 @@ export function WhatIDid({ slug }: { slug: string }) {
   );
 }
 
-// Closes each case study: the capabilities the work shows. `title` and `aside` are optional extras.
+// Closes each case study ("My role"): a scannable list of the areas Maha owned or contributed to. `title` and `aside` are optional extras.
 export function Demonstrates({
   slug,
   title,
@@ -111,7 +111,7 @@ export function Demonstrates({
     </ul>
   );
   return (
-    <CaseSection label="What this project demonstrates" title={title}>
+    <CaseSection label="My role" title={title}>
       {aside ? (
         <div className="note">
           {list}
