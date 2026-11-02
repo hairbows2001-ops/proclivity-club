@@ -1,12 +1,11 @@
 // Biography, experience, education and expertise for the About page.
-// The homepage shows only the first paragraph of `bio`.
 
 export const lede = "I am a marketer and creative strategist.";
 
 export const bio = [
   "I build brands, campaigns and content systems that connect strategy with strong visual storytelling. My work sits at the intersection of brand strategy, social media, cultural insight and creative direction.",
   "I’m interested in what makes people pay attention — and how consumer behaviour, culture and creativity can be translated into campaigns that feel relevant, intentional and memorable.",
-  "I help businesses create a brand or identity that is clear, strong and reflective of what they are.",
+  "I work across brand strategy, campaigns, content, digital experiences and cultural insight — moving between strategy and execution depending on what a project needs.",
 ];
 
 // Homepage About preview: one line that invites the reader on to /about.

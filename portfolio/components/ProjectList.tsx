@@ -12,10 +12,14 @@ export function ProjectList({ projects }: { projects: Project[] }) {
             <h3 className="entry-title">
               <Link href={p.href}>{p.title}</Link>
             </h3>
-            <ul className="entry-disciplines">
-              {p.disciplines.map((d) => (
-                <li key={d}>{d}</li>
+            <p className="entry-industry">{p.industry}</p>
+            <ul className="entry-capabilities" aria-label="Capabilities">
+              {p.capabilities.slice(0, p.homeCapabilities).map((c) => (
+                <li key={c}>{c}</li>
               ))}
+              {p.capabilities.length > p.homeCapabilities && (
+                <li className="entry-capabilities-more">+ {p.capabilities.length - p.homeCapabilities} more</li>
+              )}
             </ul>
             {p.year && <p className="entry-year">{p.year}</p>}
             <p className="entry-note">Concept project</p>

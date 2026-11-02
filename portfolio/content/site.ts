@@ -10,6 +10,17 @@ export const site = {
     "I’m a marketer and creative strategist working across brand, campaigns, content and culture. I’m interested in why people pay attention — and how that can be translated into work that feels relevant, intentional and memorable.",
   // The phrase in the introduction set in the italic accent face.
   introAccent: "why people pay attention",
+  // Homepage "what I work across" line.
+  workAcross: [
+    "Brand Strategy",
+    "Campaigns",
+    "Identity",
+    "Digital Product",
+    "Content Systems",
+    "Social Strategy",
+    "Creative Direction",
+    "Cultural Insight",
+  ],
   footerLine: "Brand strategy, campaigns and content.",
   description:
     "Maha Fatima — marketing and creative strategy. Brands, campaigns and content systems that connect strategy with strong visual storytelling.",

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { images } from "@/content/images";
-import { CaseIntro, CaseSection, NextProject } from "@/components/Case";
+import { CaseIntro, CaseSection, Demonstrates, NextProject, WhatIDid } from "@/components/Case";
 import { ImageRow } from "@/components/ImageRow";
 
 export const metadata: Metadata = {
@@ -14,11 +14,6 @@ export default function HewnPage() {
       <CaseIntro
         slug="hewn"
         subtitle="Sculptural Objects for Movement"
-        meta={[
-          { label: "Disciplines", value: "Brand Strategy, Identity Design, Packaging, Creative Direction, Digital" },
-          { label: "Scope", value: "Strategy, Identity, Visual System, Experience, Digital + Retail" },
-          { label: "Sector", value: "Wellness" },
-        ]}
       >
         <p>
           A conceptual wellness brand built at the intersection of movement, interiors and industrial design.
@@ -34,6 +29,8 @@ export default function HewnPage() {
       <div className="case-hero wrap">
         <ImageRow images={[images.hewnHero]} eager />
       </div>
+
+      <WhatIDid slug="hewn" />
 
       <CaseSection label="Strategy" title="Designed to be seen. Made to be used.">
         <p>
@@ -126,6 +123,8 @@ export default function HewnPage() {
           “Sculpted strength. Designed to be seen. Made to be used.”
         </p>
       </CaseSection>
+
+      <Demonstrates slug="hewn" />
 
       <NextProject slug="hewn" />
     </article>

@@ -7,12 +7,10 @@ export function CaseIntro({
   slug,
   subtitle,
   children,
-  meta,
 }: {
   slug: string;
   subtitle: string;
   children: React.ReactNode;
-  meta: { label: string; value: string }[];
 }) {
   const i = projectIndex(slug);
   const project = projects[i];
@@ -28,12 +26,20 @@ export function CaseIntro({
         </div>
         <div className="case-desc">{children}</div>
         <dl className="case-meta">
-          {meta.map((m) => (
-            <div key={m.label}>
-              <dt>{m.label}</dt>
-              <dd>{m.value}</dd>
-            </div>
-          ))}
+          <div>
+            <dt>Industry</dt>
+            <dd>{project.industry}</dd>
+          </div>
+          <div>
+            <dt>Capabilities</dt>
+            <dd>
+              <ul className="dot-list">
+                {project.capabilities.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
           {project.year && (
             <div>
               <dt>Year</dt>
@@ -75,6 +81,46 @@ export function CaseSection({
       </div>
       {wide && <div className="case-wide">{wide}</div>}
     </section>
+  );
+}
+
+// Opens each case study: Maha's contribution in one paragraph.
+export function WhatIDid({ slug }: { slug: string }) {
+  return (
+    <CaseSection label="What I did">
+      <p className="what-i-did">{projects[projectIndex(slug)].whatIDid}</p>
+    </CaseSection>
+  );
+}
+
+// Closes each case study: the capabilities the work shows. `title` and `aside` are optional extras.
+export function Demonstrates({
+  slug,
+  title,
+  aside,
+}: {
+  slug: string;
+  title?: React.ReactNode;
+  aside?: React.ReactNode;
+}) {
+  const list = (
+    <ul className="rule-list cols-2-list demonstrates">
+      {projects[projectIndex(slug)].demonstrates.map((d) => (
+        <li key={d}>{d}</li>
+      ))}
+    </ul>
+  );
+  return (
+    <CaseSection label="What this project demonstrates" title={title}>
+      {aside ? (
+        <div className="note">
+          {list}
+          {aside}
+        </div>
+      ) : (
+        list
+      )}
+    </CaseSection>
   );
 }
 

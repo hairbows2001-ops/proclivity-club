@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { images } from "@/content/images";
-import { CaseIntro, CaseSection, NextProject } from "@/components/Case";
+import { CaseIntro, CaseSection, Demonstrates, NextProject, WhatIDid } from "@/components/Case";
 import { ImageRow } from "@/components/ImageRow";
 import { Picture } from "@/components/Picture";
 
@@ -105,30 +105,12 @@ const kpis = [
   { name: "Conversion", items: ["Exhibition RSVPs", "Website clicks", "Newsletter sign-ups", "Event attendance"] },
 ];
 
-const demonstrates = [
-  "Social strategy",
-  "Content systems",
-  "Audience thinking",
-  "Platform strategy",
-  "Cultural marketing",
-  "Campaign development",
-  "Short-form video ideation",
-  "Creative direction",
-];
-
 export default function Gallery188Page() {
   return (
     <article>
       <CaseIntro
         slug="gallery-188"
         subtitle="Social & Content Strategy"
-        meta={[
-          { label: "Industry", value: "Arts & Culture" },
-          {
-            label: "Scope",
-            value: "Social Strategy, Content Systems, Short-Form Video, Campaign Development, Audience Strategy",
-          },
-        ]}
       >
         <p>
           Gallery 188 is imagined as an independent contemporary gallery built around emerging artists,
@@ -140,6 +122,8 @@ export default function Gallery188Page() {
       <div className="case-hero wrap">
         <ImageRow images={[images.g188Hall, images.g188Viewer]} eager />
       </div>
+
+      <WhatIDid slug="gallery-188" />
 
       <CaseSection label="Concept" title="Making contemporary art feel less intimidating.">
         <p>
@@ -300,21 +284,19 @@ export default function Gallery188Page() {
         </p>
       </CaseSection>
 
-      <CaseSection label="Project note" title={<>A strategy, <em>not just posts.</em></>}>
-        <div className="note">
-          <div>
-            <p className="small-label">This project demonstrates</p>
-            <ul className="rule-list cols-2-list">
-              {demonstrates.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-          </div>
+      <Demonstrates
+        slug="gallery-188"
+        title={
+          <>
+            A strategy, <em>not just posts.</em>
+          </>
+        }
+        aside={
           <figure className="note-image">
             <Picture img={images.g188Closing} />
           </figure>
-        </div>
-      </CaseSection>
+        }
+      />
 
       <NextProject slug="gallery-188" />
     </article>

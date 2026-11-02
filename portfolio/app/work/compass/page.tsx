@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { images } from "@/content/images";
-import { CaseIntro, CaseSection, NextProject } from "@/components/Case";
+import { CaseIntro, CaseSection, Demonstrates, NextProject, WhatIDid } from "@/components/Case";
 import { ImageRow } from "@/components/ImageRow";
 
 export const metadata: Metadata = {
@@ -14,11 +14,6 @@ export default function CompassPage() {
       <CaseIntro
         slug="compass"
         subtitle="Guiding your health. Every day."
-        meta={[
-          { label: "Disciplines", value: "Brand Strategy, Identity Design, Creative Direction, Digital Product" },
-          { label: "Scope", value: "Strategy, Identity, Visual System, Product Experience, UX/UI, Digital" },
-          { label: "Sector", value: "Caregiving, Health Tech" },
-        ]}
       >
         <p>
           Compass is a conceptual caregiving app designed to help young adults support their aging parents with
@@ -29,6 +24,8 @@ export default function CompassPage() {
       <div className="case-hero wrap">
         <ImageRow images={[images.compassHero]} eager />
       </div>
+
+      <WhatIDid slug="compass" />
 
       <CaseSection label="Concept" title="Reduce the cognitive load of care.">
         <p>
@@ -76,6 +73,8 @@ export default function CompassPage() {
           “Taken”, “Everything handled”.
         </p>
       </CaseSection>
+
+      <Demonstrates slug="compass" />
 
       <NextProject slug="compass" />
     </article>

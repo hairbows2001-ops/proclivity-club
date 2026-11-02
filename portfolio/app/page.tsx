@@ -37,6 +37,19 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="work-across wrap" aria-labelledby="across-title">
+        <div className="work-across-grid">
+          <h2 id="across-title" className="work-across-title">
+            what I work across
+          </h2>
+          <ul className="work-across-list">
+            {site.workAcross.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       <section id="work" className="work wrap" aria-labelledby="work-title">
         <div className="section-head">
           <h2 id="work-title">Selected work</h2>

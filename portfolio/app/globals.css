@@ -264,7 +264,59 @@ a {
 /* ---------- Home: intro ---------- */
 
 .intro {
-  padding-block: clamp(48px, 7vw, 112px) clamp(56px, 7vw, 104px);
+  padding-block: clamp(48px, 7vw, 112px) clamp(28px, 3vw, 44px);
+}
+
+/* "What I work across": one editorial line between the intro and the work. */
+.work-across {
+  margin-bottom: clamp(40px, 4.5vw, 72px);
+}
+
+.work-across-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 10px;
+  align-items: baseline;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.work-across-title {
+  grid-column: 1 / 4;
+  font-family: var(--italic);
+  font-style: italic;
+  font-size: clamp(1.25rem, 1.6vw, 1.45rem);
+  line-height: 1.1;
+}
+
+.work-across-list {
+  grid-column: 4 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--serif);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.dot-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Keep each capability whole; lines break between items, never inside one. */
+.entry-capabilities li,
+.dot-list li,
+.work-across-list li {
+  white-space: nowrap;
+}
+
+.work-across-list li:not(:last-child)::after,
+.entry-capabilities li:not(:last-child)::after,
+.dot-list li:not(:last-child)::after {
+  content: "·";
+  margin-inline: 0.45em;
+  color: var(--muted);
 }
 
 /* Sized so "MAHA FATIMA" holds one line on desktop and tablet; it stacks on phones. */
@@ -380,8 +432,25 @@ a {
   display: block;
 }
 
-.entry-disciplines li {
-  line-height: 1.7;
+.entry-industry {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Capabilities: secondary, one wrapping line rather than a stacked list. */
+.entry-capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  max-width: 30ch;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.entry-capabilities-more {
+  white-space: nowrap;
 }
 
 .entry-year {
@@ -579,6 +648,17 @@ a {
   line-height: 1.1;
   max-width: 26ch;
   text-wrap: balance;
+}
+
+.demonstrates {
+  max-width: 720px;
+}
+
+.what-i-did {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 1.6vw, 1.5rem);
+  line-height: 1.35;
+  max-width: 44ch;
 }
 
 .case-section-body > .case-heading + * {
@@ -1031,6 +1111,20 @@ a {
 /* ---------- Tablet ---------- */
 
 @media (max-width: 1024px) {
+  /* Closing list keeps its two columns; the photo moves below it. */
+  .note {
+    grid-template-columns: 1fr;
+  }
+
+  .note-image {
+    max-width: 420px;
+  }
+
+  .work-across-title,
+  .work-across-list {
+    grid-column: 1 / -1;
+  }
+
   .writing-main {
     grid-column: 2 / 8;
   }
@@ -1082,17 +1176,15 @@ a {
     margin: 0;
   }
 
-  .entry-disciplines {
+  .entry-industry {
     grid-column: 2 / -1;
-    display: flex;
-    flex-wrap: wrap;
     margin-top: 10px;
   }
 
-  .entry-disciplines li:not(:last-child)::after {
-    content: "·";
-    margin-inline: 8px;
-    color: var(--muted);
+  .entry-capabilities {
+    grid-column: 2 / -1;
+    max-width: none;
+    margin-top: 4px;
   }
 
   .entry-note {
