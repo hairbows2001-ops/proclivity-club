@@ -1,5 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Metadata, Viewport } from "next";
-import { preload } from "react-dom";
 import "./fonts.css";
 import "./globals.css";
 import { site } from "@/content/site";
@@ -16,18 +17,16 @@ export const viewport: Viewport = {
   themeColor: "#ffffff",
 };
 
-// Fetch the latin font files with the page, so text is set in its final fonts on first paint
-// instead of reflowing (and shifting the layout) when they arrive.
-const fontFiles = [
-  "/fonts/bodoni-moda-latin-opsz-normal.woff2",
-  "/fonts/cormorant-garamond-latin-400-italic.woff2",
-  "/fonts/inter-latin-wght-normal.woff2",
-];
+// Reveal script, inlined so it runs before first paint (see motion/reveal.js).
+const revealScript = fs.readFileSync(path.join(process.cwd(), "motion/reveal.js"), "utf8");
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  for (const href of fontFiles) preload(href, { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
   return (
-    <html lang="en-CA">
+    // The reveal script sets data-motion on <html> before hydration.
+    <html lang="en-CA" suppressHydrationWarning>
+      <head>
+        <script id="reveal" dangerouslySetInnerHTML={{ __html: revealScript }} />
+      </head>
       <body>
         <a href="#main" className="skip-link">
           Skip to content

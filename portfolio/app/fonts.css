@@ -1,4 +1,4 @@
-/* Self-hosted fonts at fixed paths so the latin files can be preloaded (see app/layout.tsx).
+/* Self-hosted fonts. Metric-matched fallbacks below keep the layout steady while they load.
    Files come from the @fontsource packages; all three are under the SIL Open Font License. */
 @font-face {
   font-family: "Bodoni Moda Variable";

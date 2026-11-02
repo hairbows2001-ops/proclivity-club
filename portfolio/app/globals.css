@@ -21,6 +21,15 @@
   --img-gap: 12px;
   --max: 1440px;
   --space-section: clamp(80px, 10vw, 152px);
+
+  /* Motion: one ease-out curve, three durations, one stagger step, small distances. */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 220ms;
+  --dur: 450ms;
+  --dur-reveal: 700ms;
+  --stagger: 80ms;
+  --rise: 14px;
+  --img-rise: 14px;
 }
 
 *,
@@ -224,13 +233,28 @@ a {
 }
 
 .nav-list a {
+  position: relative;
   display: inline-block;
   padding-block: 4px;
   text-decoration: none;
 }
 
-.nav-list a:hover {
-  text-decoration: underline;
+/* Underline drawn as a line that grows from the left on hover. */
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.nav-list a:hover::after {
+  transform: scaleX(1);
 }
 
 .site-footer {
@@ -278,8 +302,7 @@ a {
   column-gap: var(--gutter);
   row-gap: 10px;
   align-items: baseline;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule);
+  padding-top: 17px;
 }
 
 .work-across-title {
@@ -371,12 +394,40 @@ a {
 /* ---------- Home: section heads & archive ---------- */
 
 .section-head {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ink);
+  padding-bottom: 13px;
   font-size: 0.875rem;
+}
+
+/* Section rules are drawn lines (not borders) so they can draw in from the left. */
+.section-head::after,
+.work-across-grid::before,
+.case-section-grid::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform-origin: left;
+}
+
+.section-head::after {
+  bottom: 0;
+  background: var(--ink);
+}
+
+.work-across-grid::before,
+.case-section-grid::before {
+  top: 0;
+  background: var(--rule);
+}
+
+.work-across-grid,
+.case-section-grid {
+  position: relative;
 }
 
 /* Section names are the one recurring italic accent ("selected work", "about me"). */
@@ -463,14 +514,6 @@ a {
 
 .entry-body {
   grid-column: 4 / -1;
-}
-
-.entry-body img {
-  transition: opacity 0.3s ease;
-}
-
-.entry-image-link:hover img {
-  opacity: 0.92;
 }
 
 .entry:has(a:hover) .entry-title a,
@@ -620,8 +663,7 @@ a {
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--gutter);
   row-gap: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule);
+  padding-top: 17px;
 }
 
 .case-section-head {
@@ -1062,8 +1104,8 @@ a {
   inset: 0;
 }
 
-.writing-entry:hover .writing-title a,
-.writing-title a:focus-visible {
+.writing-entry:hover .writing-title-text,
+.writing-title a:focus-visible .writing-title-text {
   text-decoration: underline;
   text-decoration-thickness: 1px;
 }
@@ -1090,6 +1132,7 @@ a {
 }
 
 .writing-arrow {
+  display: inline-block;
   grid-column: 12 / -1;
   justify-self: end;
   font-size: 0.8125rem;
@@ -1106,6 +1149,182 @@ a {
 
 .view-all {
   margin-top: 24px;
+}
+
+/* =====================================================================
+   Motion
+   Hidden "before" states apply only under html[data-motion], which the reveal
+   script sets when JavaScript runs and reduced motion is off. Without it the
+   page is fully visible and static. Only opacity, transform and clip-path move.
+   ===================================================================== */
+
+.img-frame {
+  display: block;
+  overflow: hidden;
+}
+
+html[data-motion] [data-reveal] {
+  --delay: calc(var(--d, 0ms) + var(--i, 0) * var(--stagger));
+}
+
+/* Fade + rise: text blocks, metadata, rows. */
+html[data-motion] [data-reveal="fade"],
+html[data-motion] [data-reveal="head"] > *,
+html[data-motion] [data-reveal="section"] > *,
+html[data-motion] [data-stagger] > * {
+  transition:
+    opacity var(--dur-reveal) var(--ease) var(--delay),
+    transform var(--dur-reveal) var(--ease) var(--delay);
+}
+
+html[data-motion] [data-reveal="fade"]:not([data-in]),
+html[data-motion] [data-reveal="head"]:not([data-in]) > *,
+html[data-motion] [data-reveal="section"]:not([data-in]) > *,
+html[data-motion] [data-reveal]:not([data-in]) [data-stagger] > *,
+html[data-motion] [data-reveal][data-stagger]:not([data-in]) > * {
+  opacity: 0;
+  transform: translateY(var(--rise));
+}
+
+/* Heading then rule; section label then body. */
+html[data-motion] [data-reveal="section"] > :nth-child(2) {
+  --d: 120ms;
+}
+
+html[data-motion] [data-reveal="section"] [data-stagger] > * {
+  --d: 220ms;
+  --stagger: 60ms;
+}
+
+/* Each animated child resolves its own delay from its own --d / --i. */
+html[data-motion] [data-reveal="head"] > *,
+html[data-motion] [data-reveal="section"] > *,
+html[data-motion] [data-stagger] > * {
+  --delay: calc(var(--d, 0ms) + var(--i, 0) * var(--stagger));
+}
+
+/* Rules draw from the left. */
+html[data-motion] [data-reveal="head"]::after,
+html[data-motion] [data-reveal="section"]::before {
+  transition: transform var(--dur-reveal) var(--ease) 120ms;
+}
+
+html[data-motion] [data-reveal="head"]:not([data-in])::after,
+html[data-motion] [data-reveal="section"]:not([data-in])::before {
+  transform: scaleX(0);
+}
+
+/* Masked headline: the line rises from behind a crop at its baseline. The crop extends
+   past the sides, top and descenders, so nothing is clipped once it has risen. */
+html[data-motion] [data-reveal="mask"] {
+  clip-path: inset(-0.4em -0.4em -0.35em -0.4em);
+}
+
+.mask-line {
+  display: block;
+}
+
+html[data-motion] [data-reveal="mask"] .mask-line {
+  transition: transform 760ms var(--ease) var(--delay);
+}
+
+html[data-motion] [data-reveal="mask"]:not([data-in]) .mask-line {
+  transform: translateY(calc(100% + 0.4em));
+}
+
+/* Photography: uncovered bottom to top while the picture settles a few pixels. */
+html[data-motion] [data-reveal="image"] {
+  transition: clip-path var(--dur-reveal) var(--ease) var(--delay);
+  clip-path: inset(0);
+}
+
+html[data-motion] [data-reveal="image"] img {
+  transition: transform var(--dur-reveal) var(--ease) var(--delay);
+}
+
+html[data-motion] [data-reveal="image"]:not([data-in]) {
+  clip-path: inset(100% 0 0 0);
+}
+
+html[data-motion] [data-reveal="image"]:not([data-in]) img {
+  transform: translateY(var(--img-rise));
+}
+
+/* Second image in a pair follows the first. */
+html[data-motion] .img-frame {
+  --stagger: 110ms;
+}
+
+/* Project entries: metadata first, then the image. */
+html[data-motion] .entry [data-reveal="image"] {
+  --d: 100ms;
+}
+
+/* After a reveal has played, hover responds without the entrance delay. */
+html[data-motion] [data-in="done"],
+html[data-motion] [data-in="done"] img {
+  --delay: 0ms;
+}
+
+/* Desktop opening sequence for case studies: hero image last. */
+@media (min-width: 681px) {
+  html[data-motion] .case-hero [data-reveal="image"] {
+    --d: 520ms;
+  }
+}
+
+/* Hover: pointer devices only, and never under reduced motion. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .entry-image-link img,
+  html[data-motion] .entry-image-link [data-in="done"] img {
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .entry-image-link:hover img {
+    transform: scale(1.02);
+  }
+
+  .entry-more a,
+  .writing-arrow {
+    display: inline-block;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  /* inline-flex keeps the first-line baseline, so wrapped titles don't shift at rest. */
+  .writing-title-text {
+    display: inline-flex;
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .entry:has(a:hover) .entry-more a {
+    transform: translateX(5px);
+  }
+
+  .writing-entry:hover .writing-title-text {
+    transform: translateX(3px);
+  }
+
+  .writing-entry:hover .writing-arrow {
+    transform: translate(2px, -2px);
+  }
+}
+
+/* Cross-document navigations (the static export and the artifact) get a quiet
+   crossfade where the browser supports it; others navigate normally. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* Phones: shorter distances, faster, minimal stagger, no image drift. */
+@media (max-width: 680px) {
+  :root {
+    --rise: 8px;
+    --img-rise: 0px;
+    --dur-reveal: 520ms;
+    --stagger: 40ms;
+  }
 }
 
 /* ---------- Tablet ---------- */

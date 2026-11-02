@@ -17,9 +17,11 @@ export default function ContactPage() {
   return (
     <>
       <header className="page-intro wrap">
-        <h1 className="page-title">Contact</h1>
+        <h1 className="page-title" data-reveal="mask">
+          <span className="mask-line">Contact</span>
+        </h1>
       </header>
-      <section className="contact wrap" aria-label="Contact details">
+      <section className="contact wrap" aria-label="Contact details" data-reveal="fade" style={{ "--d": "200ms" } as React.CSSProperties}>
         <p className="lede contact-lede">
           For roles, collaborations or a conversation about brand, campaign and content strategy.
         </p>

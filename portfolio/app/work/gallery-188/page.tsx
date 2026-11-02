@@ -182,7 +182,7 @@ export default function Gallery188Page() {
         label="Content worlds"
         title="One gallery. Five recurring content worlds."
         wide={
-          <ol className="worlds">
+          <ol className="worlds" data-reveal="stagger" data-stagger="">
             {worlds.map((w, i) => (
               <li key={w.name}>
                 <Picture img={w.img} />
@@ -230,7 +230,7 @@ export default function Gallery188Page() {
             <p className="muted">Not: “Gallery 188 is pleased to announce…”</p>
           </div>
         </div>
-        <ul className="posts">
+        <ul className="posts" data-stagger="">
           {posts.map((p) => (
             <li key={p.name} style={{ maxWidth: p.img.width }}>
               <Picture img={p.img} />
@@ -292,7 +292,7 @@ export default function Gallery188Page() {
           </>
         }
         aside={
-          <figure className="note-image">
+          <figure className="note-image" data-reveal="image">
             <Picture img={images.g188Closing} />
           </figure>
         }

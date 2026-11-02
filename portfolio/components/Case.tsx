@@ -16,16 +16,22 @@ export function CaseIntro({
   const project = projects[i];
   return (
     <header className="case-intro wrap">
-      <p className="case-crumb">
-        <Link href="/#work">Work</Link> <span aria-hidden="true">/</span> {String(i + 1).padStart(2, "0")}
+      <p className="case-crumb" data-reveal="fade">
+        <Link prefetch={false} href="/#work">Work</Link> <span aria-hidden="true">/</span> {String(i + 1).padStart(2, "0")}
       </p>
       <div className="case-intro-grid">
         <div>
-          <h1 className="case-title">{project.title}</h1>
-          <p className="case-subtitle">{subtitle}</p>
+          <h1 className="case-title" data-reveal="mask" style={{ "--d": "80ms" } as React.CSSProperties}>
+            <span className="mask-line">{project.title}</span>
+          </h1>
+          <p className="case-subtitle" data-reveal="fade" style={{ "--d": "260ms" } as React.CSSProperties}>
+            {subtitle}
+          </p>
         </div>
-        <div className="case-desc">{children}</div>
-        <dl className="case-meta">
+        <div className="case-desc" data-reveal="fade" style={{ "--d": "380ms" } as React.CSSProperties}>
+          {children}
+        </div>
+        <dl className="case-meta" data-reveal="fade" style={{ "--d": "440ms" } as React.CSSProperties}>
           <div>
             <dt>Industry</dt>
             <dd>{project.industry}</dd>
@@ -70,7 +76,7 @@ export function CaseSection({
 }) {
   return (
     <section className="case-section wrap">
-      <div className="case-section-grid">
+      <div className="case-section-grid" data-reveal="section">
         <div className="case-section-head">
           <h2 className="case-label">{label}</h2>
         </div>
@@ -104,7 +110,7 @@ export function Demonstrates({
   aside?: React.ReactNode;
 }) {
   const list = (
-    <ul className="rule-list cols-2-list demonstrates">
+    <ul className="rule-list cols-2-list demonstrates" data-stagger="">
       {projects[projectIndex(slug)].demonstrates.map((d) => (
         <li key={d}>{d}</li>
       ))}
@@ -127,9 +133,9 @@ export function Demonstrates({
 export function NextProject({ slug }: { slug: string }) {
   const next = projects[(projectIndex(slug) + 1) % projects.length];
   return (
-    <nav className="next-project wrap" aria-label="Next project">
+    <nav className="next-project wrap" aria-label="Next project" data-reveal="fade">
       <p className="case-label">Next project</p>
-      <Link href={next.href} className="next-link">
+      <Link prefetch={false} href={next.href} className="next-link">
         {next.title} <span aria-hidden="true">→</span>
       </Link>
     </nav>

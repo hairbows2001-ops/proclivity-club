@@ -6,7 +6,7 @@ export default function NotFound() {
       <p className="eyebrow">404</p>
       <h1 className="display">This page doesn’t exist.</h1>
       <p className="back-link">
-        <Link href="/">Back to the homepage</Link>
+        <Link prefetch={false} href="/">Back to the homepage</Link>
       </p>
     </section>
   );

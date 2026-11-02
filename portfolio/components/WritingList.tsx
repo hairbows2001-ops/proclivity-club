@@ -14,14 +14,14 @@ export function WritingList({
 }) {
   const Title = level === 2 ? "h2" : "h3";
   return (
-    <ol className={`writing-list${compact ? " is-compact" : ""}`}>
+    <ol className={`writing-list${compact ? " is-compact" : ""}`} data-reveal="stagger" data-stagger="">
       {articles.map((a, i) => (
         <li key={a.url} className="writing-entry">
           <p className="entry-num">{String(i + 1).padStart(2, "0")}</p>
           <div className="writing-main">
             <Title className="writing-title">
               <a href={a.url} target="_blank" rel="noopener noreferrer">
-                {a.title}
+                <span className="writing-title-text">{a.title}</span>
                 <span className="visually-hidden"> (opens Substack in a new tab)</span>
               </a>
             </Title>

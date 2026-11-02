@@ -28,8 +28,11 @@ export function ImageRow({
         className="image-row-grid"
         style={{ gridTemplateColumns: images.map((i) => `${(i.width / i.height).toFixed(4)}fr`).join(" ") }}
       >
+        {/* Each image sits in a frame: the frame masks the reveal and crops the hover scale. */}
         {images.map((im, n) => (
-          <Picture key={im.src} img={im} eager={eager && n === 0} />
+          <span key={im.src} className="img-frame" data-reveal="image" style={{ "--i": n } as React.CSSProperties}>
+            <Picture img={im} eager={eager && n === 0} />
+          </span>
         ))}
       </div>
       {caption && <figcaption>{caption}</figcaption>}

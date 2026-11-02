@@ -26,14 +26,16 @@ export default function AboutPage() {
   return (
     <>
       <header className="page-intro wrap">
-        <h1 className="page-title">About</h1>
+        <h1 className="page-title" data-reveal="mask">
+          <span className="mask-line">About</span>
+        </h1>
       </header>
 
       <section className="about wrap" aria-label="Biography">
-        <figure className="about-portrait">
+        <figure className="about-portrait" data-reveal="image" style={{ "--d": "160ms" } as React.CSSProperties}>
           <Picture img={images.portrait} />
         </figure>
-        <div className="about-bio">
+        <div className="about-bio" data-reveal="fade" style={{ "--d": "260ms" } as React.CSSProperties}>
           <p className="lede">{lede}</p>
           {bio.map((p) => (
             <p key={p.slice(0, 20)}>{p}</p>
@@ -41,7 +43,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <div className="about-details wrap">
+      <div className="about-details wrap" data-reveal="fade">
         <section aria-labelledby="experience">
           <h2 id="experience" className="case-label">Experience</h2>
           <Timeline items={experience} />
